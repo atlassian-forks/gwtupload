@@ -46,6 +46,12 @@ import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
+import gwtupload.client.IFileInput.FileInputType;
+import gwtupload.client.ISession.Session;
+import gwtupload.client.IUploadStatus.Status;
+import gwtupload.client.bundle.UploadCss;
+import gwtupload.client.dnd.DragAndDropFormPanel;
+import gwtupload.client.dnd.IDragAndDropFileInput;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,8 +61,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import gwtupload.client.dnd.DragAndDropFormPanel;
-import gwtupload.client.dnd.IDragAndDropFileInput;
 import static gwtupload.shared.UConsts.ATTR_BLOBSTORE_PARAM_NAME;
 import static gwtupload.shared.UConsts.MULTI_SUFFIX;
 import static gwtupload.shared.UConsts.PARAM_BLOBKEY;
@@ -87,10 +91,6 @@ import static gwtupload.shared.UConsts.TAG_PERCENT;
 import static gwtupload.shared.UConsts.TAG_SIZE;
 import static gwtupload.shared.UConsts.TAG_TOTAL_BYTES;
 import static gwtupload.shared.UConsts.TAG_WAIT;
-import gwtupload.client.IFileInput.FileInputType;
-import gwtupload.client.ISession.Session;
-import gwtupload.client.IUploadStatus.Status;
-import gwtupload.client.bundle.UploadCss;
 
 /**
  * <p>
@@ -425,6 +425,11 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
 
   private SubmitCompleteHandler onSubmitCompleteHandler = new SubmitCompleteHandler() {
     public void onSubmitComplete(SubmitCompleteEvent event) {
+      if (event.getResults() == null || event.getResults().isEmpty()) {
+          // https://github.com/manolo/gwtupload/issues/11
+          log("Ignoring empty message in onSubmitComplete", null);
+          return;
+      }
       updateStatusTimer.cancel();
       onSubmitComplete = true;
       serverRawResponse = event.getResults();
@@ -1302,7 +1307,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
       statusWidget.setStatus(IUploadStatus.Status.ERROR);
     }
     onFinishUpload();
-    reatachIframe(uploadForm.getElement().getAttribute("target"));
+    //reatachIframe(uploadForm.getElement().getAttribute("target"));
   }
 
   // Fix for issue http://stackoverflow.com/questions/27711821
