@@ -8,7 +8,7 @@ import com.google.gwt.resources.client.ImageResource;
 public interface UploadCss extends ClientBundle {
     UploadCss INSTANCE = GWT.create(UploadCss.class);
 
-    @Source("Upload.css")
+    @Source("Upload.gss")
     CssResource css();
 
     @Source("cancel-upld.gif")
