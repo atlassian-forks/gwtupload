@@ -27,22 +27,22 @@ import org.apache.commons.fileupload.ProgressListener;
  *
  * Abstract class for file upload listeners used by apache-commons-fileupload to monitor
  * the progress of uploaded files.
- *
  * It is useful to implement UploadListeners that can be saved in different
  * ways.
  *
  * @author Manolo Carrasco Moñino
- *
  */
 public abstract class AbstractUploadListener implements ProgressListener, Serializable {
 
   protected static String className = AbstractUploadListener.class.getName().replaceAll("^.+\\.", "");
 
-  protected static int DEFAULT_SAVE_INTERVAL = 3000;
+  protected static final int DEFAULT_SAVE_INTERVAL = 3000;
+
+  protected static final int SLOW_UPLOADS_MAX_DELAY_MILLISECONDS = 5000;
 
   protected static UploadLogger logger = UploadLogger.getLogger(AbstractUploadListener.class);
 
-  protected static final long serialVersionUID = -6431275569719042836L;
+  private static final long serialVersionUID = -6431275569719042836L;
 
   public static AbstractUploadListener current(String sessionId) {
     throw new RuntimeException("Implement the static method 'current' in your customized class");
@@ -52,7 +52,7 @@ public abstract class AbstractUploadListener implements ProgressListener, Serial
 
   protected RuntimeException exception = null;
 
-  protected boolean exceptionTrhown = false;
+  protected boolean exceptionThrown = false;
 
   private String postResponse = null;
 
@@ -62,12 +62,13 @@ public abstract class AbstractUploadListener implements ProgressListener, Serial
 
   protected String sessionId = "";
 
-  protected int slowUploads = 0;
+  private final int slowUploadsDelayMilliseconds;
 
 
   public AbstractUploadListener(int sleepMilliseconds, long requestSize) {
-    this();
-    slowUploads = sleepMilliseconds;
+    slowUploadsDelayMilliseconds = Math.min(sleepMilliseconds, SLOW_UPLOADS_MAX_DELAY_MILLISECONDS);
+    className = this.getClass().getName().replaceAll("^.+\\.", "");
+    logger = UploadLogger.getLogger(this.getClass());
     contentLength = requestSize;
     logger.info(className + " " + sessionId + " created new instance. (slow=" + sleepMilliseconds + ", requestSize=" + requestSize + ")");
     HttpServletRequest request = UploadServlet.getThreadLocalRequest();
@@ -75,11 +76,6 @@ public abstract class AbstractUploadListener implements ProgressListener, Serial
       sessionId = request.getSession().getId();
     }
     save();
-  }
-
-  private AbstractUploadListener() {
-    className = this.getClass().getName().replaceAll("^.+\\.", "");
-    logger = UploadLogger.getLogger(this.getClass());
   }
 
   /**
@@ -173,7 +169,7 @@ public abstract class AbstractUploadListener implements ProgressListener, Serial
    * This method is called each time the server receives a block of bytes.
    */
   public void update(long done, long total, int item) {
-    if (exceptionTrhown) { return; }
+    if (exceptionThrown) { return; }
 
     // To avoid cache overloading, this object is saved when the upload starts,
     // when it has finished, or when the interval from the last save is significant.
@@ -189,14 +185,14 @@ public abstract class AbstractUploadListener implements ProgressListener, Serial
     if (isCanceled()) {
       String eName = exception.getClass().getName().replaceAll("^.+\\.", "");
       logger.info(className + " " + sessionId + " The upload has been canceled after " + bytesRead + " bytes received, raising an exception (" + eName + ") to close the socket");
-      exceptionTrhown = true;
+      exceptionThrown = true;
       throw exception;
     }
 
     // Just a way to slow down the upload process and see the progress bar in fast networks.
-    if (slowUploads > 0 && done < total) {
+    if (slowUploadsDelayMilliseconds > 0 && done < total) {
       try {
-        Thread.sleep(slowUploads);
+        Thread.sleep(slowUploadsDelayMilliseconds);
       } catch (Exception e) {
         exception = new RuntimeException(e);
       }
