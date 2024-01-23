@@ -5,12 +5,12 @@
   <artifactId>gwtupload-project</artifactId>
   <name>GwtUpload project</name>
   <packaging>pom</packaging>
-  <version>1.0.3</version>
+  <version>1.0.3-atlassian-SNAPSHOT</version>
 
   <modules>
     <module>core</module>
     <module>gae</module>
-    <!--<module>jsupload</module>-->
+    <module>jsupload</module>
     <module>samples</module>
   </modules>
 
