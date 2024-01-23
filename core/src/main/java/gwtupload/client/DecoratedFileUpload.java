@@ -37,7 +37,6 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * A widget which wraps a FileUpload (native input file), hidding it
  * and replacing it by any clickable, customizable and stylable Widget.
- *
  * To use it, first attach any HasClickHandlers widget to your display,
  * then wrap it with the DecoratedFileUpload.
  *
@@ -101,10 +100,8 @@ public class DecoratedFileUpload extends FlowPanel implements HasName, HasChange
 
   /**
    * A FileUpload which implements onChange, onMouseOver and onMouseOut events.
-   *
    * Note: although FileUpload implements HasChangeHandlers and setEnabled in version Gwt 2.0.x,
    * we put it here in order to be compatible with older Gwt versions.
-   *
    */
   public static class FileUploadWithMouseEvents extends MultipleFileUpload implements HasMouseOverHandlers, HasMouseOutHandlers, HasChangeHandlers {
 
@@ -173,12 +170,10 @@ public class DecoratedFileUpload extends FlowPanel implements HasName, HasChange
   /**
    * Implementation for browsers which support the click() method:
    * IE, Chrome, Safari
-   *
    * The hack here is to put the customized button
    * and the file fileUplad statically positioned in an absolute panel.
    * This panel has the size of the button, and the fileUplad is not shown
    * because it is placed out of the width and height panel limits.
-   *
    */
   private static class DecoratedFileUploadImplClick extends DecoratedFileUploadImpl {
 
@@ -230,12 +225,10 @@ public class DecoratedFileUpload extends FlowPanel implements HasName, HasChange
   /**
    * Implementation for browsers which do not support the click() method:
    * FF, Opera
-   *
    * The hack here is to place the customized button and the file fileUplad positioned
    * statically in an absolute panel which has size of the button.
    * The file fileUplad is wrapped into a transparent panel, which also has the button
    * size and is placed covering the customizable button.
-   *
    * When the user puts his mouse over the button and clicks on it, what really
    * happens is that the user clicks on the transparent file fileUplad showing
    * the choose file dialog.
@@ -354,7 +347,7 @@ public class DecoratedFileUpload extends FlowPanel implements HasName, HasChange
   private static final String STYLE_CLICKABLE_WIDGET = "DecoratedFileUpload-button";
   private static final String STYLE_DISABLED_SUFFIX = "disabled";
   protected Widget button;
-  protected FileUploadWithMouseEvents input;;
+  protected FileUploadWithMouseEvents input;
   protected boolean reuseButton = false;
   private DecoratedFileUploadImpl impl;
   private String text = "";

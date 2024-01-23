@@ -29,12 +29,10 @@ import com.google.gwt.user.client.Element;
 
 /**
  * @author Manolo Carrasco Moñino
- * 
  * This class preloads an image in the browser, and in the case of
  * success executes a user defined function.
  * 
  * It stores the original size of the image.
- *
  */
 @Export
 @ExportPackage("jsu")

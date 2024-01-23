@@ -28,12 +28,10 @@ import javax.servlet.http.HttpSession;
 /**
  * This is a File Upload Listener that is used by Apache Commons File Upload to
  * monitor the progress of the uploaded file.
- *
  * This object and its attributes have to be serializable because
  * Google App-Engine uses dataStore and memCache to store session objects.
  *
  * @author Manolo Carrasco Moñino
- *
  */
 public class UploadListener extends AbstractUploadListener {
 
@@ -86,7 +84,7 @@ public class UploadListener extends AbstractUploadListener {
       if (bytesRead > lastBytesRead) {
         lastData = now;
         lastBytesRead = bytesRead;
-      } else if (now - lastData > noDataTimeout) { return true; }
+      } else return now - lastData > noDataTimeout;
       return false;
     }
   }
@@ -143,7 +141,7 @@ public class UploadListener extends AbstractUploadListener {
    * @see gwtupload.server.AbstractUploadListener#remove()
    */
   public void remove() {
-    logger.info(className + " " + sessionId + " remove: " + toString());
+    logger.info(className + " " + sessionId + " remove: " + this);
     if (session() != null) {
       session().removeAttribute(ATTR_LISTENER);
     }
@@ -158,7 +156,7 @@ public class UploadListener extends AbstractUploadListener {
       session().setAttribute(ATTR_LISTENER, this);
     }
     saved = new Date();
-    logger.debug(className + " " + sessionId + " save " + toString());
+    logger.debug(className + " " + sessionId + " save " + this);
   }
 
   /* (non-Javadoc)

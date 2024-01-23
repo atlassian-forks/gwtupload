@@ -5,7 +5,7 @@ import java.util.logging.Level;
 
 public class UploadLogger {
 
-  public static interface ILogger {
+  public interface ILogger {
     void debug(Object o);
 
     void info(Object o);

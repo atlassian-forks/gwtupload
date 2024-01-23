@@ -50,7 +50,7 @@ public class ModalUploadStatus extends BaseUploadStatus {
    */
   @Override public Widget asWidget() {
     return new HTML();
-  };
+  }
 
   /**
    * show/hide the modal dialog.

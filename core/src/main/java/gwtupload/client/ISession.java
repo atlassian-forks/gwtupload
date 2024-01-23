@@ -19,7 +19,7 @@ import static gwtupload.shared.UConsts.TAG_SESSION_ID;
 
 public interface ISession {
 
-  public static class CORSSessionParameter extends Session {
+  class CORSSessionParameter extends Session {
     @Override
     protected void setSessionId(String s) {
       super.setSessionId(s);
@@ -29,7 +29,7 @@ public interface ISession {
     }
   }
 
-  public static class CORSSession extends Session {
+  class CORSSession extends Session {
     @Override
     protected RequestBuilder createRequest(Method method, int timeout, String... params) {
       RequestBuilder req =  super.createRequest(method, timeout, params);
@@ -38,7 +38,7 @@ public interface ISession {
     }
   }
 
-  public static class Session implements ISession {
+  class Session implements ISession {
     String sessionId;
     String servletPath = "servlet.gupld";
 
@@ -57,11 +57,9 @@ public interface ISession {
     /**
      * Sends a request to the server in order to get the session cookie,
      * when the response with the session comes, it submits the form.
-     *
      * This is needed because this client application usually is part of
      * static files, and the server doesn't set the session until dynamic pages
      * are requested.
-     *
      * If we submit the form without a session, the server creates a new
      * one and send a cookie in the response, but the response with the
      * cookie comes to the client at the end of the request, and in the
@@ -125,13 +123,13 @@ public interface ISession {
     }
   }
 
-  static final int DEFAULT_AJAX_TIMEOUT = 10000;
+  int DEFAULT_AJAX_TIMEOUT = 10000;
 
-  public void getSession(RequestCallback callback);
+  void getSession(RequestCallback callback);
 
-  public String composeURL(String... params);
+  String composeURL(String... params);
 
-  public void sendRequest(String name, RequestCallback callback, String... params);
+  void sendRequest(String name, RequestCallback callback, String... params);
 
-  public String getServletPath();
+  String getServletPath();
 }

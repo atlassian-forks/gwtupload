@@ -136,7 +136,7 @@ public class JsProperties {
 
   public int getInt(String name, int deFault) {
     String val = defined(name) ? get(name).replaceAll("[^\\d]", "") : "";
-    if (val.length() == 0) { return deFault; }
+    if (val.isEmpty()) { return deFault; }
     return Integer.valueOf(val);
   }
 

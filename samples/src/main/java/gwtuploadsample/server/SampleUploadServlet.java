@@ -36,12 +36,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * This is an example of how to use UploadAction class.
- *
  * This servlet saves all received files in a temporary folder,
  * and deletes them when the user sends a remove request.
  *
  * @author Manolo Carrasco Moñino
- *
  */
 public class SampleUploadServlet extends UploadAction {
 
@@ -62,7 +60,7 @@ public class SampleUploadServlet extends UploadAction {
     String response = "";
     int cont = 0;
     for (FileItem item : sessionFiles) {
-      if (false == item.isFormField()) {
+      if (!item.isFormField()) {
         cont++;
         try {
           /// Create a new file based on the remote file name in the client

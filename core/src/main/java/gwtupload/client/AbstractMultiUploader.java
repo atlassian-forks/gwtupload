@@ -31,7 +31,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiChild;
-import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -381,7 +380,6 @@ public class AbstractMultiUploader<T extends IsWidget & HasWidgets.ForIsWidget> 
    * Return the status of the uploader whose fieldName or fileName is equal to
    * the name passed as argument.
    *
-   * @param name
    * @return the status of the uploader in the case of found or UNINITIALIZED
    */
   public Status getStatus(String name) {
@@ -455,7 +453,7 @@ public class AbstractMultiUploader<T extends IsWidget & HasWidgets.ForIsWidget> 
    */
   public void setEnabled(boolean b) {
     enabled = b;
-    Set<IUploadStatus.CancelBehavior> cancel = b && uploaders.size() > 0 ? currentUploader.getStatusWidget().getCancelConfiguration() :  EnumSet.of(CancelBehavior.DISABLED);
+    Set<IUploadStatus.CancelBehavior> cancel = b && !uploaders.isEmpty() ? currentUploader.getStatusWidget().getCancelConfiguration() :  EnumSet.of(CancelBehavior.DISABLED);
     for (IUploader u : uploaders) {
       if (!u.equals(currentUploader)) {
         u.getStatusWidget().setCancelConfiguration(cancel);
@@ -498,14 +496,10 @@ public class AbstractMultiUploader<T extends IsWidget & HasWidgets.ForIsWidget> 
   /**
    * Set the maximum number of files that can be uploaded to the server.
    * Only success uploads are counted.
-   *
    * If you decrease this parameter, files already uploaded or in queue are
    * not removed.
-   *
    * Setting this parameter, multi-selection is disabled because we can not
    * compute uploaded files until they go to server.
-   *
-   * @param max
    */
   public void setMaximumFiles(int max) {
     maximumFiles = max;

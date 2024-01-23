@@ -37,15 +37,12 @@ import gwtupload.client.DecoratedFileUpload.FileUploadWithMouseEvents;
 
 /**
  * Interface used by Uploaders to use and configure a customized file fileUplad.
- *
  * Widgets implementing this interface have to render a file fileUplad tag because
  * it will be added to the form which is sent to the server.
- *
  * This interface has thought to let the user the option to create customizable
  * panels for file inputs.
  *
  * @author Manolo Carrasco Moñino
- *
  */
 public interface IFileInput extends HasChangeHandlers, IsWidget {
 
@@ -53,7 +50,7 @@ public interface IFileInput extends HasChangeHandlers, IsWidget {
    * A HyperLinkFileInput implementing the IFileInput interface
    *
    */
-  public class AnchorFileInput extends ButtonFileInput {
+  class AnchorFileInput extends ButtonFileInput {
     public AnchorFileInput() {
       super(new Anchor());
     }
@@ -62,7 +59,7 @@ public interface IFileInput extends HasChangeHandlers, IsWidget {
   /**
    * Just a FileUpload which implements the interface IFileInput
    */
-  public class BrowserFileInput extends FileUploadWithMouseEvents implements
+  class BrowserFileInput extends FileUploadWithMouseEvents implements
       IFileInput {
 
     @Deprecated
@@ -92,7 +89,7 @@ public interface IFileInput extends HasChangeHandlers, IsWidget {
    * A DecoratedFileInput implementing the IFileInput interface
    *
    */
-  public class ButtonFileInput extends DecoratedFileUpload implements IFileInput {
+  class ButtonFileInput extends DecoratedFileUpload implements IFileInput {
     protected boolean i18n = true;
 
     public ButtonFileInput() {
@@ -129,7 +126,7 @@ public interface IFileInput extends HasChangeHandlers, IsWidget {
   /**
    * Enum for different IFileInput implementations
    */
-  public enum FileInputType implements HasFileInputType {
+  enum FileInputType implements HasFileInputType {
     ANCHOR {
       public IFileInput getInstance() {
         return GWT.create(AnchorFileInput.class);
@@ -280,7 +277,7 @@ public interface IFileInput extends HasChangeHandlers, IsWidget {
    * A LabelFileInput implementing the IFileInput interface
    *
    */
-  public class LabelFileInput extends ButtonFileInput {
+  class LabelFileInput extends ButtonFileInput {
     public LabelFileInput() {
       super(new Label());
       addChangeHandler(new ChangeHandler() {
@@ -337,31 +334,22 @@ public interface IFileInput extends HasChangeHandlers, IsWidget {
 
   /**
    * Set the length in characters of the fileinput which are shown.
-   *
-   * @param length
    */
   void setLength(int length);
 
   /**
    * Sets the html name for this fileUplad element. It is the name of the form
    * parameter sent to the server.
-   *
-   * @param fieldName
    */
   void setName(String fieldName);
 
   /**
    * Set the size of the widget.
-   *
-   * @param width
-   * @param height
    */
   void setSize(String width, String height);
 
   /**
    * Set the text for the link which opens the browse file dialog.
-   *
-   * @param text
    */
   void setText(String text);
 

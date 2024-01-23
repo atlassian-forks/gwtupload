@@ -10,13 +10,13 @@ import gwtupload.client.FileList;
  */
 public interface IDragAndDropFileInput {
 
-    public boolean hasFiles();
+    boolean hasFiles();
 
-    public FileList getFiles();
+    FileList getFiles();
 
-    public String getName();
+    String getName();
 
-    public void reset();
+    void reset();
 
-    public void lock();
+    void lock();
 }

@@ -29,21 +29,16 @@ import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
 /**
  * This is a File Upload Listener that can be used by Apache Commons File Upload to
  * monitor the progress of the uploaded file.
- *
  * This listener is thought to be used in App-Engine because in this platform session's objects
  * are not updated until the request has finished.
- *
  * This Listener saves itself in google's appengine-memcache.
- *
  * Notes:
  * Although objects must be saved instantly in cache, sometimes the insertion of a new object
  * is done fast, but the modification of it is delayed. So in this implementation, we
  * store a new object for each save action.
- *
  * The cache instance is configured to store objects for a very short time.
  *
  * @author Manolo Carrasco Moñino
- *
  */
 public class MemCacheUploadListener extends AbstractUploadListener {
 
@@ -94,7 +89,7 @@ public class MemCacheUploadListener extends AbstractUploadListener {
       getCacheInstance().remove(KEY_LISTENER + sessionId + i);
     }
     counter = 0;
-    logger.debug(className + " " + sessionId + " Remove " + this.toString());
+    logger.debug(className + " " + sessionId + " Remove " + this);
   }
 
   @SuppressWarnings("unchecked")
@@ -111,7 +106,7 @@ public class MemCacheUploadListener extends AbstractUploadListener {
       getCacheInstance().put(KEY_LISTENER + sessionId + counter, this);
 
       saved = new Date();
-      logger.debug(className + " " + sessionId + " Saved " + this.toString());
+      logger.debug(className + " " + sessionId + " Saved " + this);
       counter++;
     }
   }

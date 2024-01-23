@@ -24,15 +24,12 @@ import java.util.Map;
 /**
  * This File Upload Listener is used by Apache Commons File Upload to
  * monitor the progress of the uploaded file.
- *
  * This Listener saves itself into a unique map in memory.
  * It doesn't work when the application is deployed in cluster.
- *
  * It is thought to be used in systems where session objects
  * are not updated until the request has finished.
  *
  * @author Manolo Carrasco Moñino
- *
  */
 public class MemoryUploadListener extends AbstractUploadListener {
 
@@ -52,13 +49,13 @@ public class MemoryUploadListener extends AbstractUploadListener {
 
   public void remove() {
     listeners.remove(sessionId);
-    logger.info(className + " " + sessionId + " Remove " + this.toString());
+    logger.info(className + " " + sessionId + " Remove " + this);
     current(sessionId);
   }
 
   public void save() {
     listeners.put(sessionId, this);
     saved = new Date();
-    logger.debug(className + " " + sessionId + " Saved " + this.toString());
+    logger.debug(className + " " + sessionId + " Saved " + this);
   }
 }

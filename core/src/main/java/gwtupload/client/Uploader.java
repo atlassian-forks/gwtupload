@@ -19,14 +19,12 @@ package gwtupload.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
-import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.FormElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.RequestTimeoutException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Timer;
@@ -48,7 +46,6 @@ import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.NodeList;
 import com.google.gwt.xml.client.XMLParser;
-import com.google.gwt.xml.client.impl.DOMParseException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -286,7 +283,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
           url = text.replaceAll("[\r\n]+","").replaceAll("^.*" + bpath + "\\s*", "").replaceAll("\\s*" + sbpath + ".*$", "");
         }
       }
-      if (url != null && url.length() > 0 && !"null".equalsIgnoreCase(url)) {
+      if (url != null && !url.isEmpty() && !"null".equalsIgnoreCase(url)) {
         if (session.getServletPath().startsWith("http")) {
           url = session.getServletPath().replaceFirst("(https?://[^/]+).*", "$1") + url;
         }
@@ -397,7 +394,6 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
 
   /**
    * Handler called when the status request response comes back.
-   *
    * In case of success it parses the xml document received and updates the progress widget
    * In case of a non timeout error, it stops the status repeater and notifies the user with the exception.
    */
@@ -411,14 +407,14 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
         updateStatusTimer.cancel();
         String message = removeHtmlTags(exception.getMessage());
         message += "\n" + exception.getClass().getName();
-        message += "\n" + exception.toString();
+        message += "\n" + exception;
         statusWidget.setError(i18nStrs.uploaderServerUnavailable() + " (4) " + getServletPath() + "\n\n" + message);
       }
     }
 
     public void onResponseReceived(Request request, Response response) {
       waitingForResponse = false;
-      if (finished == true && !uploading) {
+      if (finished && !uploading) {
         updateStatusTimer.cancel();
         return;
       }
@@ -453,9 +449,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
 
   /**
    *  Handler called when the file form is submitted
-   *
    *  If any validation fails, the upload process is canceled.
-   *
    *  If the client hasn't got the session, it asks for a new one
    *  and the submit process is delayed until the client has got it
    */
@@ -468,7 +462,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
         return;
       }
 
-      if (!autoSubmit && fileQueue.size() > 0) {
+      if (!autoSubmit && !fileQueue.isEmpty()) {
         statusWidget.setError(i18nStrs.uploaderActiveUpload());
         event.cancel();
         return;
@@ -731,10 +725,8 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
 
   /**
    * Don't submit the form if the user has not selected any file.
-   *
    * It is useful in forms where the developer whats the user to submit
    * information but the attachment is optional.
-   *
    * By default avoidEmptyFile is true.
    */
   public void avoidEmptyFiles(boolean b) {
@@ -853,7 +845,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
   }
 
   public UploadedInfo getServerInfo() {
-    return serverMessage.getUploadedInfos().size() > 0 ? serverMessage.getUploadedInfos().get(0) : null;
+    return !serverMessage.getUploadedInfos().isEmpty() ? serverMessage.getUploadedInfos().get(0) : null;
   }
 
   /**
@@ -1061,7 +1053,6 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
   /**
    * Method called when the file input has changed. This happens when the
    * user selects a file.
-   *
    * Override this method if you want to add a customized behavior,
    * but remember to call this in your function
    */
@@ -1153,7 +1144,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
   }-*/;
 
   private boolean isTheFirstInQueue() {
-    return fileQueue.size() > 0 && fileQueue.get(0).equals(getInputName());
+    return !fileQueue.isEmpty() && fileQueue.get(0).equals(getInputName());
   }
 
   private void parseAjaxResponse(String responseTxt) {
@@ -1285,7 +1276,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
    * Sends a request to the server in order to get the blobstore path.
    * When the response with the session comes, it submits the form.
    */
-  private void sendAjaxRequestToGetBlobstorePath() throws RequestException {
+  private void sendAjaxRequestToGetBlobstorePath() {
     session.sendRequest("blobstore", onBlobstoreReceivedCallback, PARAM_BLOBSTORE + "=true&" + PARAM_NAME + "=" + getInputName() + "&" + PARAM_FILENAME + "=" + fileInput.getFilename());
   }
 
@@ -1334,7 +1325,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
 
   private boolean fileSelected() {
     for (String s: basenames) {
-      if (s.length() > 0) {
+      if (!s.isEmpty()) {
         return true;
       }
     }
@@ -1351,7 +1342,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
   }
 
   private boolean validateExtension(String filename) {
-    if (filename == null || filename.length() == 0) {
+    if (filename == null || filename.isEmpty()) {
       return !avoidEmptyFile;
     }
     boolean valid = Utils.validateExtension(validExtensions, filename);

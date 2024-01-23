@@ -45,7 +45,6 @@ import static gwtupload.shared.UConsts.MULTI_SUFFIX;
  * This class in useful in App-engine where writing to file-system is not supported.
  * Cache has a limit of 1024KB per object, so this class stores long files in multiple
  * cache records.
- *
  * Some time ago GAE had the limitation a request size is limited to 512 KB.
  * It seems it has changed and now it is possible larger sizes.
  *
@@ -56,10 +55,8 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
 
   /**
    * An OutputStream that saves received data in memory.
-   *
    * When the close method is called, it invokes the save method of the object
    * which is using this.
-   *
    */
   public static class CacheableByteArrayOutputStream extends OutputStream implements Serializable {
 
@@ -77,7 +74,7 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
       saveable.save(this);
     }
 
@@ -102,7 +99,7 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
     }
 
     @Override
-    public void write(int b) throws IOException {
+    public void write(int b) {
       buff[size++] = (byte) b;
     }
   }
@@ -159,7 +156,7 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
       return fname;
     }
 
-    public InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() {
       return new MemCacheInputStream(fname);
     }
 
@@ -167,7 +164,7 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
       return name;
     }
 
-    public OutputStream getOutputStream() throws IOException {
+    public OutputStream getOutputStream() {
       return data;
     }
 
@@ -222,7 +219,7 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
       formfield = arg0;
     }
 
-    public void write(File arg0) throws Exception {
+    public void write(File arg0) {
       throw new UnsupportedOperationException(this.getClass().getName() + " doesn't support write to files");
     }
 
@@ -257,9 +254,7 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
     }
   }
 
-  /**
-   */
-  public class MemCacheInputStream extends InputStream {
+  public static class MemCacheInputStream extends InputStream {
 
     ByteArrayInputStream is;
     String key;
@@ -273,7 +268,7 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
       }
     }
 
-    public int read() throws IOException {
+    public int read() {
       if (is == null || is.available() <= 0) {
         try {
           byte[] data = (byte[]) cache.get(key);

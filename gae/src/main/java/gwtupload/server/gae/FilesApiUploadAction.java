@@ -36,9 +36,7 @@ import com.google.appengine.api.blobstore.BlobKey;
 
 /**
  * Upload servlet which uses the FilesApiFileItemFactory using the GAE File API.
- *
  * To use this servlet you need:
- *
  * Add these lines to your web.xml
  *
  * <pre>

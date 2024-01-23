@@ -32,7 +32,6 @@ import gwtupload.client.PreloadedImage;
 import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
 import gwtupload.client.SingleUploader;
 import gwtupload.client.SingleUploaderModal;
-import gwtupload.client.Uploader;
 import jsupload.client.ChismesUploadProgress;
 
 /**
@@ -54,7 +53,7 @@ public class SingleUploadSample implements EntryPoint {
     }
   };
 
-  protected UploaderConstants i18nStrs;;
+  protected UploaderConstants i18nStrs;
 
   private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
     public void onFinish(IUploader uploader) {

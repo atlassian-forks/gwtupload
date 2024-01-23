@@ -179,7 +179,7 @@ public class FilesApiFileItemFactory implements FileItemFactory, Serializable {
       formField = arg0;
     }
 
-    public void write(File arg0) throws Exception {
+    public void write(File arg0) {
       throw new UnsupportedOperationException("Writing to file is not allowed");
     }
 

@@ -187,8 +187,6 @@ public class PreloadedImage extends Image implements HasJsData {
 
   /**
    * Set the handler to be called in the case of error.
-   *
-   * @param onError
    */
   public void setOnErrorHandler(OnErrorPreloadedImageHandler onError) {
     this.onError = onError;
@@ -196,7 +194,6 @@ public class PreloadedImage extends Image implements HasJsData {
 
   /**
    * Set the handler to be called when the image has been sucessfuly loaded.
-   * @param onLoad
    */
   public void setOnloadHandler(OnLoadPreloadedImageHandler onLoad) {
     this.onLoad = onLoad;

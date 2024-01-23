@@ -92,7 +92,7 @@ public class ChismesUploadProgress extends BaseUploadStatus {
   @Override
   public void setError(String error) {
     setStatus(IUploadStatus.Status.ERROR);
-    if (error != null && error.length() > 0) {
+    if (error != null && !error.isEmpty()) {
       Window.alert(error);
     }
   }

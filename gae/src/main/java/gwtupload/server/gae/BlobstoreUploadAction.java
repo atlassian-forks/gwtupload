@@ -121,8 +121,7 @@ public class BlobstoreUploadAction extends UploadAction {
         logger.info("BLOB-STORE-SERVLET: Serving blobstore file. " + request.getParameter(PARAM_BLOBKEY));
         blobstoreService.serve(new BlobKey(request.getParameter(PARAM_BLOBKEY)), response);
       } catch (Throwable e) {
-        logger.info("BLOB-STORE-SERVLET: Exception accessing blobStoreService:" + e.getMessage());
-        e.printStackTrace();
+        logger.info("BLOB-STORE-SERVLET: Exception accessing blobStoreService:" + e.getMessage(), e);
         renderXmlResponse(request, response, "Error getting blob: " + e.getMessage() + " " + request.getParameter(PARAM_BLOBKEY));
       }
     } else if (request.getParameter(PARAM_REDIRECT) != null) {
@@ -156,7 +155,7 @@ public class BlobstoreUploadAction extends UploadAction {
   }
 
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String error = null;
     perThreadRequest.set(request);
     try {
@@ -184,7 +183,7 @@ public class BlobstoreUploadAction extends UploadAction {
       request.setAttribute(getSessionLastFilesKey(request), sessionFiles);
     }
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-    if (blobs != null && blobs.size() > 0) {
+    if (blobs != null && !blobs.isEmpty()) {
       for (Entry<String, List<BlobKey>> e: blobs.entrySet()) {
         for (BlobKey blob: e.getValue()) {
           BlobstoreFileItem bfi = null;

@@ -52,11 +52,6 @@ class JsUtils {
 
   /**
    * Creates a valueChangeHandler that executes a ChangeClosure.
-   * 
-   * @param <T>
-   * @param clazz
-   * @param jsChange
-   * @return
    */
   public static final <T extends HasJsData> ValueChangeHandler<T> getClosureHandler(final T clazz, final JsChangeClosure jsChange) {
     return new ValueChangeHandler<T>() {

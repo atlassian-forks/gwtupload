@@ -216,8 +216,6 @@ public class BaseUploadStatus implements IUploadStatus {
   /**
    * Set the percent of the upload process.
    * Override this method if your customized progress widget needs percent computed value.
-   *
-   * @param percent
    */
   public void setPercent(int percent) {
   }
@@ -304,8 +302,6 @@ public class BaseUploadStatus implements IUploadStatus {
 
   /**
    * Override the default progress widget with a customizable one.
-   *
-   * @param progress
    */
   protected void setProgressWidget(Widget progress) {
     if (prg != null) {
@@ -319,9 +315,6 @@ public class BaseUploadStatus implements IUploadStatus {
 
   /**
    * Thought to be overridable by the user when extending this.
-   *
-   * @param showProgress
-   * @param statusMessage
    */
   protected void updateStatusPanel(boolean showProgress, String statusMessage) {
     if (showProgress && prg == null) {

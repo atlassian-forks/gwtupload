@@ -26,8 +26,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import java.util.List;
 
-import gwtupload.client.Uploader;
-
 import static gwtupload.client.dnd.DropZoneFileInput.STYLE_DROP_ZONE;
 import static gwtupload.client.dnd.DropZoneFileInput.STYLE_DROP_ZONE_SENDING;
 import gwtupload.client.FileList;

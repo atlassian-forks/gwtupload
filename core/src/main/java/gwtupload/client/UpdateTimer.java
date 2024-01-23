@@ -82,9 +82,6 @@ public class UpdateTimer extends Timer {
     super.scheduleRepeating(periodMillis);
   }
 
-  /**
-   * @param periodMillis
-   */
   public void setInterval(int periodMillis) {
     if (this.interval != periodMillis) {
       this.interval = periodMillis;

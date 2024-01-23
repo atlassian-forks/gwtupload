@@ -80,7 +80,7 @@ public class BlobstoreFileItemFactory implements FileItemFactory, Serializable {
       return fname;
     }
 
-    public InputStream getInputStream() throws IOException {
+    public InputStream getInputStream() {
       return new DumbInputStream();
     }
 
@@ -96,7 +96,7 @@ public class BlobstoreFileItemFactory implements FileItemFactory, Serializable {
       return name;
     }
 
-    public OutputStream getOutputStream() throws IOException {
+    public OutputStream getOutputStream() {
       return data;
     }
 
@@ -135,7 +135,7 @@ public class BlobstoreFileItemFactory implements FileItemFactory, Serializable {
       this.key = key;
     }
 
-    public void write(File arg0) throws Exception {
+    public void write(File arg0) {
       throw new UnsupportedOperationException(this.getClass().getName()
           + " doesn't support write to files");
     }
@@ -156,7 +156,7 @@ public class BlobstoreFileItemFactory implements FileItemFactory, Serializable {
    */
   public static class DumbInputStream extends InputStream implements Serializable {
     private static final long serialVersionUID = 1L;
-    public int read() throws IOException {
+    public int read() {
       return -1;
     }
   }
@@ -165,7 +165,7 @@ public class BlobstoreFileItemFactory implements FileItemFactory, Serializable {
    */
   public static class DumbOutputStream extends OutputStream implements Serializable {
     private static final long serialVersionUID = 1L;
-    public void write(int b) throws IOException {
+    public void write(int b) {
     }
   }
 

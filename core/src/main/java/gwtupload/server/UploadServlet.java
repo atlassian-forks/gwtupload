@@ -169,10 +169,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
 
   /**
    * Copy the content of an input stream to an output one.
-   *
-   * @param in
-   * @param out
-   * @throws IOException
    */
   public static void copyFromInputStreamToOutputStream(InputStream in, OutputStream out) throws IOException {
     IOUtils.copy(in, out);
@@ -182,8 +178,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
    * Utility method to get a fileItem of type file from a vector using either
    * the file name or the attribute name.
    *
-   * @param sessionFiles
-   * @param parameter
    * @return fileItem of the file found or null
    */
   public static FileItem findFileItem(List<FileItem> sessionFiles, String parameter) {
@@ -205,8 +199,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
   /**
    * Utility method to get a fileItem from a vector using the attribute name.
    *
-   * @param sessionFiles
-   * @param attrName
    * @return fileItem found or null
    */
   public static FileItem findItemByFieldName(List<FileItem> sessionFiles, String attrName) {
@@ -224,14 +216,12 @@ public class UploadServlet extends HttpServlet implements Servlet {
    * Utility method to get a fileItem from a vector using the file name It
    * only returns items of type file.
    *
-   * @param sessionFiles
-   * @param fileName
    * @return fileItem of the file found or null
    */
   public static FileItem findItemByFileName(List<FileItem> sessionFiles, String fileName) {
     if (sessionFiles != null) {
       for (FileItem fileItem : sessionFiles) {
-        if (fileItem.isFormField() == false && fileItem.getName().equalsIgnoreCase(fileName)) {
+        if (!fileItem.isFormField() && fileItem.getName().equalsIgnoreCase(fileName)) {
           return fileItem;
         }
       }
@@ -323,8 +313,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
 
   /**
    * Removes all FileItems stored in session under the session key and the temporary data.
-   *
-   * @param request
    */
   public static void removeSessionFileItems(HttpServletRequest request, String sessionFilesKey) {
     removeSessionFileItems(request, sessionFilesKey, true);
@@ -342,7 +330,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
    * Removes all FileItems stored in session under the session key, but in this case
    * the user can specify whether the temporary data is removed from disk.
    *
-   * @param request
    * @param removeData
    *                    true: the file data is deleted.
    *                    false: use it when you are referencing file items
@@ -372,11 +359,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
 
   /**
    * Delete an uploaded file.
-   *
-   * @param request
-   * @param response
-   * @return FileItem
-   * @throws IOException
    */
   protected static FileItem removeUploadedFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String parameter = request.getParameter(UConsts.PARAM_REMOVE);
@@ -450,18 +432,13 @@ public class UploadServlet extends HttpServlet implements Servlet {
   /**
    * Writes a XML response to the client.
    * The message must be a text which will be wrapped in an XML structure.
-   *
    * Note: if the request is a POST, the response should set the content type
    *  to text/html or text/plain in order to be able in the client side to
    *  read the iframe body (submitCompletEvent.getResults()), otherwise the
    *  method returns null
    *
-   * @param request
-   * @param response
-   * @param message
    * @param post
    *        specify whether the request is post or not.
-   * @throws IOException
    */
   protected static void renderXmlResponse(HttpServletRequest request, HttpServletResponse response, String message, boolean post) throws IOException {
     String contentType = post ? "text/plain" : "text/html";
@@ -484,9 +461,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
 
   /**
    * Simple method to get a string from the exception stack.
-   *
-   * @param e
-   * @return string
    */
   protected static String stackTraceToString(Throwable e) {
     StringWriter writer = new StringWriter();
@@ -504,8 +478,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
 
   /**
    * Mark the current upload process to be canceled.
-   *
-   * @param request
    */
   public void cancelUpload(HttpServletRequest request) {
     logger.debug("UPLOAD-SERVLET (" + request.getSession().getId() + ") cancelling Upload");
@@ -518,9 +490,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
   /**
    * Override this method if you want to check the request before it is passed
    * to commons-fileupload parser.
-   *
-   * @param request
-   * @throws RuntimeException
    */
   public void checkRequest(HttpServletRequest request) {
     logger.debug("UPLOAD-SERVLET (" + request.getSession().getId() + ") procesing a request with size: " + getContentLength(request) + " bytes.");
@@ -531,10 +500,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
 
   /**
    * Get an uploaded file item.
-   *
-   * @param request
-   * @param response
-   * @throws IOException
    */
   public void getUploadedFile(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String parameter = request.getParameter(UConsts.PARAM_SHOW);
@@ -619,7 +584,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
   /**
    * Create a new listener for this session.
    *
-   * @param request
    * @return the appropriate listener
    */
   protected AbstractUploadListener createNewListener(HttpServletRequest request) {
@@ -655,7 +619,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
         renderXmlResponse(request, response,
             "<" + TAG_BLOBSTORE + ">" + (isAppEngine() && useBlobstore) + "</" + TAG_BLOBSTORE + ">" +
             "<" + TAG_SESSION_ID + ">" + sessionId + "</" + TAG_SESSION_ID + ">");
-      } else if (isAppEngine() && (request.getParameter(UConsts.PARAM_BLOBSTORE) != null || request.getParameterMap().size() == 0)) {
+      } else if (isAppEngine() && (request.getParameter(UConsts.PARAM_BLOBSTORE) != null || request.getParameterMap().isEmpty())) {
         String blobStorePath = getBlobstorePath(request);
         logger.debug("UPLOAD-SERVLET (" + request.getSession().getId() + ") getBlobstorePath=" + blobStorePath);
         renderXmlResponse(request, response, "<" + TAG_BLOBSTORE_PATH + ">" + blobStorePath + "</" + TAG_BLOBSTORE_PATH + ">");
@@ -700,18 +664,16 @@ public class UploadServlet extends HttpServlet implements Servlet {
    * The post method is used to receive the file and save it in the user
    * session. It returns a very XML page that the client receives in an
    * iframe.
-   *
    * The content of this xml document has a tag error in the case of error in
    * the upload process or the string OK in the case of success.
-   *
    */
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     perThreadRequest.set(request);
     String error;
     try {
       error = parsePostRequest(request, response);
       Map<String, String> stat = new HashMap<String, String>();
-      if (error != null && error.length() > 0 ) {
+      if (error != null && !error.isEmpty()) {
         stat.put(TAG_ERROR, error);
       } else {
         getFileItemsSummary(request, stat);
@@ -782,11 +744,8 @@ public class UploadServlet extends HttpServlet implements Servlet {
     return statusToString(file);
   }
 
-/**
+  /**
    * Notify to the listener that the upload has finished.
-   *
-   * @param request
- * @param postResponse
    */
   protected void finish(HttpServletRequest request, String postResponse) {
     AbstractUploadListener listener = getCurrentListener(request);
@@ -802,7 +761,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
   /**
    * Get the listener active in this session.
    *
-   * @param request
    * @return the listener active
    */
   protected AbstractUploadListener getCurrentListener(HttpServletRequest request) {
@@ -826,8 +784,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
    * Method executed each time the client asks the server for the progress status.
    * It uses the listener to generate the adequate response
    *
-   * @param request
-   * @param fieldname
    * @return a map of tag/values to be rendered
    */
   protected Map<String, String> getUploadStatus(HttpServletRequest request, String fieldname, Map<String, String> ret) {
@@ -873,7 +829,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
       } else {
         List<FileItem> sessionFiles = getMySessionFileItems(request);
         for (FileItem file : sessionFiles) {
-          if (file.isFormField() == false && file.getFieldName().equals(fieldname)) {
+          if (!file.isFormField() && file.getFieldName().equals(fieldname)) {
             ret.put(TAG_FINISHED, "ok");
             ret.put(UConsts.PARAM_FILENAME, fieldname);
             logger.debug("UPLOAD-SERVLET (" + session.getId() + ") getUploadStatus: " + fieldname +
@@ -896,9 +852,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
    * This method parses the submit action, puts in session a listener where the
    * progress status is updated, and eventually stores the received data in
    * the user session.
-   *
    * returns null in the case of success or a string with the error
-   *
    */
   protected String parsePostRequest(HttpServletRequest request, HttpServletResponse response) {
 
@@ -952,7 +906,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
       }
 
       String error = "";
-      if (uploadedItems.size() > 0) {
+      if (!uploadedItems.isEmpty()) {
         sessionFiles.addAll(uploadedItems);
         String msg = "";
         for (FileItem i : sessionFiles) {
@@ -965,7 +919,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
         logger.error("UPLOAD-SERVLET (" + session.getId() + ") error NO DATA received ");
         error += getMessage("no_data");
       }
-      return error.length() > 0 ? error : null;
+      return !error.isEmpty() ? error : null;
 
     // So much silly questions in the list about this issue.
     } catch(LinkageError e) {
@@ -987,8 +941,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
       listener.setException(e);
       throw e;
     } catch (Throwable e) {
-      logger.error("UPLOAD-SERVLET (" + request.getSession().getId() + ") Unexpected Exception -> " + e.getMessage() + "\n" + stackTraceToString(e));
-      e.printStackTrace();
+      logger.error("UPLOAD-SERVLET (" + request.getSession().getId() + ") Unexpected Exception -> " + e.getMessage() + "\n" + stackTraceToString(e), e);
       RuntimeException ex = new UploadException(e);
       listener.setException(ex);
       throw ex;
@@ -997,8 +950,6 @@ public class UploadServlet extends HttpServlet implements Servlet {
 
   /**
    * Remove the listener active in this session.
-   *
-   * @param request
    */
   protected void removeCurrentListener(HttpServletRequest request) {
     AbstractUploadListener listener = getCurrentListener(request);
@@ -1012,6 +963,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
    * multiple instances of uploaders in an application with the same session but
    * who do not wish to share the uploaded files.
    * Example:
+   * <pre>
    * protected String getSessionFilesKey(HttpServletRequest request) {
    *  return getSessionFilesKey(request.getParameter("randomNumber"));
    * }
@@ -1019,7 +971,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
    * public static String getSessionFilesKey(String parameter) {
    *  return "SESSION_FILES_" + parameter;
    * }
-   *
+   * </pre>
    */
   protected String getSessionFilesKey(HttpServletRequest request) {
     return SESSION_FILES;

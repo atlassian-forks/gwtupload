@@ -31,7 +31,6 @@ import com.google.gwt.user.client.ui.Widget;
 import java.util.EnumSet;
 
 import gwtupload.client.IUploadStatus.CancelBehavior;
-import gwtupload.client.dnd.IDropZone;
 import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
 import gwtupload.client.IUploader;

@@ -139,34 +139,6 @@
                     <optimizationLevel>9</optimizationLevel>
                 </configuration>
             </plugin>
-            <!--      <plugin>-->
-            <!--        <artifactId>maven-antrun-plugin</artifactId>-->
-            <!--        <executions>-->
-            <!--          <execution>-->
-            <!--            <configuration>-->
-            <!--              <target>-->
-            <!--                <exec dir="." executable="perl">-->
-            <!--                  <arg line="-pi -e 's#^\s*(containerId: .*)$#$1 action: &quot;/cgi-bin/jsupload.cgi.pl&quot;, #g' target/${project.build.finalName}/jsupload/JsUpload.html" />-->
-            <!--                </exec>-->
-            <!--                <exec dir="target" executable="git">-->
-            <!--                  <arg line="clone https://code.google.com/archive/p/gwtupload.wiki" />-->
-            <!--                </exec>-->
-            <!--                <exec dir="." executable="perl">-->
-            <!--                  <arg line="gjslib.pl" />-->
-            <!--                </exec>-->
-            <!--                <exec dir="target/gwtupload.wiki" executable="${wikiSvnExec}">-->
-            <!--                  <arg line="commit -m updated_wiki_pages -a" />-->
-            <!--                </exec>-->
-            <!--                <exec dir="target/gwtupload.wiki" executable="${wikiSvnExec}">-->
-            <!--                  <arg line="push origin master" />-->
-            <!--                </exec>-->
-            <!--              </target>-->
-            <!--            </configuration>-->
-            <!--            <phase>prepare-package</phase>-->
-            <!--            <goals><goal>run</goal></goals>-->
-            <!--          </execution>-->
-            <!--        </executions>-->
-            <!--      </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -207,14 +179,6 @@
             </plugin>
         </plugins>
         <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
-
     </build>
-
-    <distributionManagement>
-        <site>
-            <id>googlecode</id>
-            <url>svn:https://gwtupload.googlecode.com/svn/site/${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>

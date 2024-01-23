@@ -52,13 +52,13 @@ public final class Utils {
     for (int i = 0; i < textNodes.getLength(); i++) {
       Node n = textNodes.item(i);
       if (n.getNodeType() == Node.TEXT_NODE
-          && n.getNodeValue().replaceAll("[ \\n\\t\\r]", "").length() > 0) {
+          && !n.getNodeValue().replaceAll("[ \\n\\t\\r]", "").isEmpty()) {
         ret += n.getNodeValue();
       } else if (n.getNodeType() == Node.CDATA_SECTION_NODE) {
         ret += n.getNodeValue();
       }
     }
-    return ret.length() == 0 ? null : ret.replaceAll("^\\s+", "").replaceAll("\\s+$", "");
+    return ret.isEmpty() ? null : ret.replaceAll("^\\s+", "").replaceAll("\\s+$", "");
   }
 
   public static String getXmlNodeValue(Node node) {
@@ -70,13 +70,13 @@ public final class Utils {
     for (int i = 0; i < textNodes.getLength(); i++) {
       Node n = textNodes.item(i);
       if (n.getNodeType() == Node.TEXT_NODE
-          && n.getNodeValue().replaceAll("[ \\n\\t\\r]", "").length() > 0) {
+          && !n.getNodeValue().replaceAll("[ \\n\\t\\r]", "").isEmpty()) {
         ret += n.getNodeValue();
       } else if (n.getNodeType() == Node.CDATA_SECTION_NODE) {
         ret += n.getNodeValue();
       }
     }
-    return ret.length() == 0 ? null : ret.replaceAll("^\\s+", "").replaceAll("\\s+$", "");
+    return ret.isEmpty() ? null : ret.replaceAll("^\\s+", "").replaceAll("\\s+$", "");
   }
 
   /**
@@ -84,15 +84,14 @@ public final class Utils {
    * validExtensions array. It isn't case sensitive.
    *
    * @param validExtensions an array with allowed extensions. ie: .jpg, .mpg ..
-   * @param fileName
    * @return true in the case of valid filename
    */
   public static boolean validateExtension(List<String> validExtensions, String fileName) {
-    if (fileName == null || fileName.length() == 0) {
+    if (fileName == null || fileName.isEmpty()) {
       return false;
     }
 
-    boolean valid = validExtensions == null || validExtensions.isEmpty() ? true : false;
+    boolean valid = validExtensions == null || validExtensions.isEmpty();
     if (!valid) for (String regx : validExtensions) {
       if (fileName.toLowerCase().matches(regx)) {
         valid = true;

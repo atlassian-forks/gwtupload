@@ -85,18 +85,13 @@ public class UploadAction extends UploadServlet {
    */
   public static String getFormField(List<FileItem> sessionFiles, String fieldName) {
     FileItem item = findItemByFieldName(sessionFiles, fieldName);
-    return item == null || item.isFormField() == false ? null : item.getString();
+    return item == null || !item.isFormField() ? null : item.getString();
   }
 
   /**
    * This method is called when all data is received in the server.
-   *
    * Temporary files are not deleted until the user calls removeSessionFileItems(request)
-   *
    * Override this method to customize the behavior
-   *
-   * @param request
-   * @param sessionFiles
    *
    * @return the text/html message to be sent to the client.
    *         In the case of null the standard response configured for this
@@ -104,7 +99,6 @@ public class UploadAction extends UploadServlet {
    *
    * @throws UploadActionException
    *         In the case of error
-   *
    */
   public String executeAction(HttpServletRequest request, List<FileItem> sessionFiles) throws UploadActionException {
     return null;
@@ -114,18 +108,12 @@ public class UploadAction extends UploadServlet {
    * This method is called when a received file is requested to be removed and
    * is in the collection of items stored in session.
    * If the item does't exist in session this method is not called
-   *
    * After it, the item is removed from the session items collection.
-   *
    * Override this method to customize the behavior
-   *
-   * @param request
-   * @param item    The item in session
    *
    * @throws UploadActionException
    *         In the case of an error, the exception message is returned to
    *         the client and the item is not deleted from session
-   *
    */
   public void removeItem(HttpServletRequest request, FileItem item)  throws UploadActionException {
   }
@@ -133,16 +121,13 @@ public class UploadAction extends UploadServlet {
   /**
    * This method is called when a received file is requested to be removed.
    * After it, the item is removed from the session items collection.
-   *
    * Override this method to customize the behavior
    *
-   * @param request
    * @param fieldName    The name of the filename input
    *
    * @throws UploadActionException
    *         In the case of an error, the exception message is returned to
    *         the client and the item is not deleted from session
-   *
    */
   public void removeItem(HttpServletRequest request, String fieldName)  throws UploadActionException {
   }
@@ -169,7 +154,7 @@ public class UploadAction extends UploadServlet {
     }
   }
 
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String error = null;
     String message = null;
     Map<String, String> tags = new HashMap<String, String>();

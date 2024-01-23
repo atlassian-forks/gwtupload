@@ -36,8 +36,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * @author Manolo Carrasco Moñino
- * 
  * Exportable version of gwt Uploader.
  * 
  * <h3>Features</h3>
@@ -49,7 +47,6 @@ import com.google.gwt.user.client.ui.Widget;
  * <li>It can call configurable functions on the events of onChange, onStart and onFinish</li>
  * <li>The user can cancel the current upload, can delete files in the queue or remove uploaded files</li>
  * </ul>
- *  
  */
 
 @Export
@@ -174,7 +171,6 @@ public class Upload implements Exportable {
   /**
    * Depending on the multiple feature configuration, it returns a javascript 
    * array of as many elements as images uploaded or one element.
-   *  
    * The element with the uploaded info has this structure:
    *    upload.data().url      // The url to download the uploaded file from the server
    *    upload.data().name     // The name of the input form element

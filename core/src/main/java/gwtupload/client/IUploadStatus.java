@@ -39,35 +39,35 @@ public interface IUploadStatus extends HasProgress, IsWidget {
   /**
    * Enumeration of possible cancel options
    */
-  public static enum CancelBehavior {
+  enum CancelBehavior {
     DISABLED, REMOVE_CANCELLED_FROM_LIST, REMOVE_REMOTE, STOP_CURRENT, REMOVE_INVALID
   }
 
   /**
    * Enumeration of possible status values
    */
-  public static enum Status {
+  enum Status {
     CANCELED, CANCELING, DELETED, DONE, ERROR, INPROGRESS, QUEUED, REPEATED, INVALID, SUBMITING, SUCCESS, UNINITIALIZED, CHANGED
   }
 
   /**
    * Handler called when the user clicks on the cancel button.
    */
-  public interface UploadCancelHandler extends EventHandler {
+  interface UploadCancelHandler extends EventHandler {
     void onCancel();
   }
 
   /**
    * Handler called when the status changes.
    */
-  public interface UploadStatusChangedHandler extends EventHandler {
+  interface UploadStatusChangedHandler extends EventHandler {
     void onStatusChanged(IUploadStatus statusWiget);
   }
 
   /**
    * Interface for internationalizable elements.
    */
-  public interface UploadStatusConstants extends Constants {
+  interface UploadStatusConstants extends Constants {
 
     @DefaultStringValue(" ")
     String uploadLabelCancel();
@@ -89,9 +89,9 @@ public interface IUploadStatus extends HasProgress, IsWidget {
     String uploadStatusSuccess();
   }
 
-  public Set<CancelBehavior> DEFAULT_CANCEL_CFG = EnumSet.of(CancelBehavior.REMOVE_REMOTE, CancelBehavior.STOP_CURRENT);
-  public Set<CancelBehavior> DEFAULT_MULTI_CFG = EnumSet.of(CancelBehavior.STOP_CURRENT, CancelBehavior.REMOVE_REMOTE, CancelBehavior.REMOVE_INVALID, CancelBehavior.REMOVE_CANCELLED_FROM_LIST);
-  public Set<CancelBehavior> GMAIL_MULTI_CFG = EnumSet.of(CancelBehavior.STOP_CURRENT, CancelBehavior.REMOVE_REMOTE, CancelBehavior.REMOVE_INVALID, CancelBehavior.REMOVE_CANCELLED_FROM_LIST);
+  Set<CancelBehavior> DEFAULT_CANCEL_CFG = EnumSet.of(CancelBehavior.REMOVE_REMOTE, CancelBehavior.STOP_CURRENT);
+  Set<CancelBehavior> DEFAULT_MULTI_CFG = EnumSet.of(CancelBehavior.STOP_CURRENT, CancelBehavior.REMOVE_REMOTE, CancelBehavior.REMOVE_INVALID, CancelBehavior.REMOVE_CANCELLED_FROM_LIST);
+  Set<CancelBehavior> GMAIL_MULTI_CFG = EnumSet.of(CancelBehavior.STOP_CURRENT, CancelBehavior.REMOVE_REMOTE, CancelBehavior.REMOVE_INVALID, CancelBehavior.REMOVE_CANCELLED_FROM_LIST);
 
   /**
    * Add a new  handler which will be fired when the user clicks on the cancel button.

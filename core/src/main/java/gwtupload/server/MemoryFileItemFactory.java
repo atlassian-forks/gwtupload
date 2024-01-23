@@ -110,7 +110,7 @@ public class MemoryFileItemFactory implements FileItemFactory, Serializable {
         fname = fName;
         name = fileName;
         formfield = isFormField;
-      };
+      }
 
       public void delete() {
         data.reset();
@@ -128,7 +128,7 @@ public class MemoryFileItemFactory implements FileItemFactory, Serializable {
         return fname;
       }
 
-      public InputStream getInputStream() throws IOException {
+      public InputStream getInputStream() {
         return new ByteArrayInputStream(get());
       }
 
@@ -136,7 +136,7 @@ public class MemoryFileItemFactory implements FileItemFactory, Serializable {
         return name;
       }
 
-      public OutputStream getOutputStream() throws IOException {
+      public OutputStream getOutputStream() {
         return data;
       }
 
@@ -168,7 +168,7 @@ public class MemoryFileItemFactory implements FileItemFactory, Serializable {
         formfield = arg0;
       }
 
-      public void write(File arg0) throws Exception {
+      public void write(File arg0) {
         throw new UnsupportedOperationException("Writing to file is not allowed");
       }
 
