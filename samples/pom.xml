@@ -161,7 +161,6 @@
           <!-- Compress a bit more the js output -->
           <disableCastChecking>true</disableCastChecking>
           <enableAssertions>false</enableAssertions>
-          <enableClosureCompiler>true</enableClosureCompiler>
           <disableClassMetadata>true</disableClassMetadata>
           <optimizationLevel>9</optimizationLevel>
           <!-- Modules to compile -->
