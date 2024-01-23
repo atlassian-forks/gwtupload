@@ -80,7 +80,7 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>gwtchismes</groupId>
+      <groupId>com.github.manolo.gwtchismes</groupId>
       <artifactId>gwtchismes</artifactId>
       <version>${gwtChismesVersion}</version>
       <scope>provided</scope>

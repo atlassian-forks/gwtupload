@@ -10,7 +10,7 @@
   <modules>
     <module>core</module>
     <module>gae</module>
-    <module>jsupload</module>
+    <!--<module>jsupload</module>-->
     <module>samples</module>
   </modules>
 
@@ -31,7 +31,7 @@
     <commonsIoVersion>2.3</commonsIoVersion>
     <gwtChismesVersion>0.9.7</gwtChismesVersion>
     <gwtExporterVersion>2.4.0-M1</gwtExporterVersion>
-    <gwtIncubatorVersion>20101117-r1766</gwtIncubatorVersion>
+    <gwtIncubatorVersion>2.0.1</gwtIncubatorVersion>
     <junitVersion>3.8.2</junitVersion>
     <log4jVersion>1.2.16</log4jVersion>
     <commonsLang3Version>3.1</commonsLang3Version>
@@ -108,7 +108,7 @@
       <version>${commonsIoVersion}</version>
     </dependency>
     <dependency>
-      <groupId>gwtchismes</groupId>
+      <groupId>com.github.manolo.gwtchismes</groupId>
       <artifactId>gwtchismes</artifactId>
       <version>${gwtChismesVersion}</version>
       <scope>provided</scope>

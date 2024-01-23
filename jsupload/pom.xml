@@ -67,7 +67,7 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>gwtchismes</groupId>
+      <groupId>com.github.manolo.gwtchismes</groupId>
       <artifactId>gwtchismes</artifactId>
       <version>${gwtChismesVersion}</version>
       <scope>provided</scope>
@@ -148,7 +148,7 @@
         <executions>
           <execution>
             <configuration>
-              <tasks>
+              <target>
                 <exec dir="." executable="perl">
                   <arg line="-pi -e 's#^\s*(containerId: .*)$#$1 action: &quot;/cgi-bin/jsupload.cgi.pl&quot;, #g' target/${project.build.finalName}/jsupload/JsUpload.html" />
                 </exec>
@@ -164,7 +164,7 @@
                 <exec dir="target/gwtupload.wiki" executable="${wikiSvnExec}">
                   <arg line="push origin master" />
                 </exec>
-              </tasks>
+              </target>
             </configuration>
             <phase>prepare-package</phase>
             <goals><goal>run</goal></goals>
