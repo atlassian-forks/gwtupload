@@ -30,7 +30,7 @@ import java.util.HashMap;
 public class I18nConstants implements UploaderConstants {
 
   UploaderConstants defaultStrs = GWT.create(UploaderConstants.class);
-  HashMap<String, String> strs = new HashMap<String, String>();
+  HashMap<String, String> strs = new HashMap<>();
 
   public I18nConstants(JsProperties prop, String regional) {
     if (prop.defined(regional)) {

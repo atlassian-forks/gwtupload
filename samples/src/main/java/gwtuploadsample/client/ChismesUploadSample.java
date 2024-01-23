@@ -94,7 +94,7 @@ public class ChismesUploadSample implements EntryPoint {
       new PreloadedImage(((Image) event.getSource()).getUrl(), showLargeImageHandler);
     }
   };
-  private HashMap<String, Widget> loadedImages = new HashMap<String, Widget>();
+  private HashMap<String, Widget> loadedImages = new HashMap<>();
 
   private FlexTable mainPanel = new FlexTable();
   private GWTCBox multiUploadBox = new GWTCBox();

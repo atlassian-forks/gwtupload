@@ -45,11 +45,11 @@ public class SampleUploadServlet extends UploadAction {
 
   private static final long serialVersionUID = 1L;
 
-  Hashtable<String, String> receivedContentTypes = new Hashtable<String, String>();
+  Hashtable<String, String> receivedContentTypes = new Hashtable<>();
   /**
    * Maintain a list with received files and their content types.
    */
-  Hashtable<String, File> receivedFiles = new Hashtable<String, File>();
+  Hashtable<String, File> receivedFiles = new Hashtable<>();
 
   /**
    * Override executeAction to save the received files in a custom place
@@ -57,7 +57,7 @@ public class SampleUploadServlet extends UploadAction {
    */
   @Override
   public String executeAction(HttpServletRequest request, List<FileItem> sessionFiles) throws UploadActionException {
-    String response = "";
+    StringBuilder response = new StringBuilder();
     int cont = 0;
     for (FileItem item : sessionFiles) {
       if (!item.isFormField()) {
@@ -79,10 +79,10 @@ public class SampleUploadServlet extends UploadAction {
           receivedContentTypes.put(item.getFieldName(), item.getContentType());
 
           /// Compose a xml message with the full file information
-          response += "<file-" + cont + "-field>" + item.getFieldName() + "</file-" + cont + "-field>\n";
-          response += "<file-" + cont + "-name>" + item.getName() + "</file-" + cont + "-name>\n";
-          response += "<file-" + cont + "-size>" + item.getSize() + "</file-" + cont + "-size>\n";
-          response += "<file-" + cont + "-type>" + item.getContentType() + "</file-" + cont + "type>\n";
+          response.append("<file-").append(cont).append("-field>").append(item.getFieldName()).append("</file-").append(cont).append("-field>\n");
+          response.append("<file-").append(cont).append("-name>").append(item.getName()).append("</file-").append(cont).append("-name>\n");
+          response.append("<file-").append(cont).append("-size>").append(item.getSize()).append("</file-").append(cont).append("-size>\n");
+          response.append("<file-").append(cont).append("-type>").append(item.getContentType()).append("</file-").append(cont).append("type>\n");
         } catch (Exception e) {
           throw new UploadActionException(e);
         }

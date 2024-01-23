@@ -44,10 +44,10 @@ public interface IUploader extends HasJsData, HasWidgets, IsWidget {
      */
     String message;
 
-    List<UploadedInfo> uploadedInfos = new ArrayList<UploadedInfo>();
+    List<UploadedInfo> uploadedInfos = new ArrayList<>();
 
     public List<String> getUploadedFileNames() {
-      List<String> result = new ArrayList<String>();
+      List<String> result = new ArrayList<>();
       for (UploadedInfo info: uploadedInfos) {
         result.add(info.getFileName());
       }
@@ -55,7 +55,7 @@ public interface IUploader extends HasJsData, HasWidgets, IsWidget {
     }
 
     public List<String> getUploadedFieldNames() {
-      List<String> result = new ArrayList<String>();
+      List<String> result = new ArrayList<>();
       for (UploadedInfo info: uploadedInfos) {
         result.add(info.getField());
       }
@@ -67,7 +67,7 @@ public interface IUploader extends HasJsData, HasWidgets, IsWidget {
      * It's useful to display uploaded images or generate links to uploaded files.
      */
     public List<String> getUploadedFileUrls() {
-      List<String> result = new ArrayList<String>();
+      List<String> result = new ArrayList<>();
       for (UploadedInfo info: uploadedInfos) {
         result.add(info.getFileUrl());
       }

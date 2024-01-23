@@ -24,7 +24,6 @@ import org.apache.commons.fileupload.FileItemHeaders;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -107,8 +106,7 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
   /**
    * FileItem class which stores file data in cache.
    */
-  public class CacheableFileItem implements FileItem, Saveable<CacheableByteArrayOutputStream> {
-    private static final long serialVersionUID = 1L;
+  public static class CacheableFileItem implements FileItem, Saveable<CacheableByteArrayOutputStream> {
     private static final String SUFFIX = "X";
     String ctype;
     CacheableByteArrayOutputStream data = null;
@@ -197,12 +195,12 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
           }});
           size = data.size();
           int storedBytes = 0;
-          String suffix = "";
+          StringBuilder suffix = new StringBuilder();
           while(storedBytes < size) {
             byte[] buff = new byte[Math.min(MEMCACHE_LIMIT, size - storedBytes)];
             storedBytes += data.read(buff);
             cache.put(fname + suffix, buff);
-            suffix += SUFFIX;
+            suffix.append(SUFFIX);
           }
           data = null;
         } catch (Exception e) {
@@ -230,11 +228,11 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
           int pos = 0;
           byte[] pData = new byte[size];
           byte[] cacheBuf = null;
-          String suffix = "";
+          StringBuilder suffix = new StringBuilder();
           while ((cacheBuf = (byte[]) cache.get(fname + suffix)) != null) {
             System.arraycopy(cacheBuf, 0, pData, pos, cacheBuf.length);
             pos += cacheBuf.length;
-            suffix += SUFFIX;
+            suffix.append(SUFFIX);
           }
           return pData;
         } catch (Exception e) {
@@ -304,7 +302,7 @@ public class MemCacheFileItemFactory implements FileItemFactory, Serializable {
 
   private int requestSize = 0;
 
-  private HashMap<String, Integer> map = new HashMap<String, Integer>();
+  private HashMap<String, Integer> map = new HashMap<>();
 
   public MemCacheFileItemFactory() {
     this(DEFAULT_REQUEST_SIZE);

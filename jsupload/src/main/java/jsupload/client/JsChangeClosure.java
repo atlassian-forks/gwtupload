@@ -53,7 +53,7 @@ class JsUtils {
   /**
    * Creates a valueChangeHandler that executes a ChangeClosure.
    */
-  public static final <T extends HasJsData> ValueChangeHandler<T> getClosureHandler(final T clazz, final JsChangeClosure jsChange) {
+  public static <T extends HasJsData> ValueChangeHandler<T> getClosureHandler(final T clazz, final JsChangeClosure jsChange) {
     return new ValueChangeHandler<T>() {
       public void onValueChange(ValueChangeEvent<T> event) {
         Object data = null;
@@ -67,7 +67,7 @@ class JsUtils {
     };
   }
   
-  public static final ValueChangeHandler<HasJsData> getDataHandler(final JsChangeClosure jsChange) {
+  public static ValueChangeHandler<HasJsData> getDataHandler(final JsChangeClosure jsChange) {
     return new ValueChangeHandler<HasJsData>() {
       public void onValueChange(ValueChangeEvent<HasJsData> event) {
         Object data = null;
@@ -81,7 +81,7 @@ class JsUtils {
     };
   }
   
-  public static final IUploader.OnCancelUploaderHandler getOnCancelUploaderHandler(final JsChangeClosure jsChange) {
+  public static IUploader.OnCancelUploaderHandler getOnCancelUploaderHandler(final JsChangeClosure jsChange) {
     return new IUploader.OnCancelUploaderHandler() {
       public void onCancel(IUploader u) {
         if (jsChange != null) {
@@ -91,7 +91,7 @@ class JsUtils {
     };
   }
   
-  public static final IUploader.OnChangeUploaderHandler getOnChangeUploaderHandler(final JsChangeClosure jsChange) {
+  public static IUploader.OnChangeUploaderHandler getOnChangeUploaderHandler(final JsChangeClosure jsChange) {
     return new IUploader.OnChangeUploaderHandler() {
       public void onChange(IUploader u) {
         if (jsChange != null) {
@@ -101,7 +101,7 @@ class JsUtils {
     };
   }
   
-  public static final IUploader.OnFinishUploaderHandler getOnFinishUploaderHandler(final JsChangeClosure jsChange) {
+  public static IUploader.OnFinishUploaderHandler getOnFinishUploaderHandler(final JsChangeClosure jsChange) {
     return new IUploader.OnFinishUploaderHandler() {
       public void onFinish(IUploader u) {
         if (jsChange != null) {
@@ -111,7 +111,7 @@ class JsUtils {
     };
   }
   
-  public static final OnLoadPreloadedImageHandler getOnLoadPreloadedImageHandler(final JsChangeClosure jsChange) {
+  public static OnLoadPreloadedImageHandler getOnLoadPreloadedImageHandler(final JsChangeClosure jsChange) {
     return new OnLoadPreloadedImageHandler() {
       public void onLoad(PreloadedImage image) {
         if (jsChange != null) {
@@ -121,7 +121,7 @@ class JsUtils {
     };
   }
 
-  public static final IUploader.OnStartUploaderHandler getOnStartUploaderHandler(final JsChangeClosure jsChange) {
+  public static IUploader.OnStartUploaderHandler getOnStartUploaderHandler(final JsChangeClosure jsChange) {
     return new IUploader.OnStartUploaderHandler() {
       public void onStart(IUploader u) {
         if (jsChange != null) {
@@ -131,7 +131,7 @@ class JsUtils {
     };
   }
 
-  public static final IUploader.OnStatusChangedHandler getStatusChangedHandler(final JsChangeClosure jsChange) {
+  public static IUploader.OnStatusChangedHandler getStatusChangedHandler(final JsChangeClosure jsChange) {
     return new IUploader.OnStatusChangedHandler() {
       public void onStatusChanged(IUploader u) {
         if (jsChange != null) {

@@ -86,14 +86,14 @@ public class FilesApiUploadAction extends UploadAction {
   @Override
   public String executeAction(HttpServletRequest request,
       List<FileItem> sessionFiles) throws UploadActionException {
-    String ret = "";
+    StringBuilder ret = new StringBuilder();
     for (FileItem i : sessionFiles) {
       if (!i.isFormField()) {
-        ret += (ret.isEmpty() ? "" : " ") + ((FilesAPIFileItem) i).getKey().getKeyString();
+        ret.append((ret.length() == 0) ? "" : " ").append(((FilesAPIFileItem) i).getKey().getKeyString());
         logger.info("Received new file, stored in blobstore with the key: " + ret);
       }
     }
-    return ret;
+    return ret.toString();
   }
 
   @Override

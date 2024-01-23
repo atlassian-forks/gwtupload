@@ -173,9 +173,9 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
   private static final int DEFAULT_TIME_MAX_WITHOUT_RESPONSE = 60000;
   private static final int DEFAULT_UPDATE_INTERVAL = 500;
 
-  private static HashSet<String> fileDone = new HashSet<String>();
-  private static HashSet<String> fileUploading = new HashSet<String>();
-  private static List<String> fileQueue = new ArrayList<String>();
+  private static HashSet<String> fileDone = new HashSet<>();
+  private static HashSet<String> fileUploading = new HashSet<>();
+  private static List<String> fileQueue = new ArrayList<>();
 
   private static int statusInterval = DEFAULT_UPDATE_INTERVAL;
 
@@ -243,7 +243,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
   protected boolean autoSubmit = false;
   private boolean avoidRepeatedFiles = false;
   private boolean avoidEmptyFile = true;
-  private List<String> basenames = new ArrayList<String>();
+  private List<String> basenames = new ArrayList<>();
   private boolean blobstore = false;
   private IUploadStatus.UploadCancelHandler cancelHandler = new IUploadStatus.UploadCancelHandler() {
     public void onCancel() {
@@ -255,8 +255,6 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
   private boolean multiple = true;
   private IFileInput fileInput;
   protected String fileInputPrefix = "GWTU";
-  private String fileInputName = null;
-  private FileInputType fileInputType;
   private boolean finished = false;
   private long lastData = now();
   private final RequestCallback onBlobstoreReceivedCallback = new RequestCallback() {
@@ -329,7 +327,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
     }
   };
 
-  private List<IUploader.OnChangeUploaderHandler> onChangeHandlers = new ArrayList<IUploader.OnChangeUploaderHandler>();
+  private List<IUploader.OnChangeUploaderHandler> onChangeHandlers = new ArrayList<>();
   private final RequestCallback onDeleteFileCallback = new RequestCallback() {
     public void onError(Request request, Throwable exception) {
       statusWidget.setStatus(Status.DELETED);
@@ -362,7 +360,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
     }
   };
 
-  private List<IUploader.OnFinishUploaderHandler> onFinishHandlers = new ArrayList<IUploader.OnFinishUploaderHandler>();
+  private List<IUploader.OnFinishUploaderHandler> onFinishHandlers = new ArrayList<>();
 
   private final RequestCallback onSessionReceivedCallback = new RequestCallback() {
     public void onError(Request request, Throwable exception) {
@@ -388,9 +386,9 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
     }
   };
 
-  private List<IUploader.OnStartUploaderHandler> onStartHandlers = new ArrayList<IUploader.OnStartUploaderHandler>();
+  private List<IUploader.OnStartUploaderHandler> onStartHandlers = new ArrayList<>();
 
-  private List<IUploader.OnStatusChangedHandler> onStatusChangeHandlers = new ArrayList<IUploader.OnStatusChangedHandler>();
+  private List<IUploader.OnStatusChangedHandler> onStatusChangeHandlers = new ArrayList<>();
 
   /**
    * Handler called when the status request response comes back.
@@ -604,9 +602,8 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
    */
   public Uploader(FileInputType type, FormPanel form) {
     thisInstance = this;
-    this.fileInputType = type;
 
-    if (form == null) {
+      if (form == null) {
       form = new FormFlowPanel();
     }
     uploadForm = form;
@@ -621,7 +618,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
     uploaderPanel.add(uploadForm);
     uploaderPanel.setStyleName(STYLE_MAIN);
 
-    setFileInput(fileInputType.getInstance());
+    setFileInput(type.getInstance());
 
     setStatusWidget(statusWidget);
 
@@ -899,8 +896,8 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
    */
   public void reset() {
     reuse();
-    fileDone = new HashSet<String>();
-    fileUploading = new HashSet<String>();
+    fileDone = new HashSet<>();
+    fileUploading = new HashSet<>();
   }
 
   /**
@@ -1002,30 +999,30 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
    * @see gwtupload.client.IUploader#setValidExtensions(java.lang.String[])
    */
   public void setValidExtensions(String... extensions) {
-    this.validExtensions = new ArrayList<String>();
+    this.validExtensions = new ArrayList<>();
     validExtensionsMsg = "";
     if (extensions == null || extensions.length == 0) {
       return;
     }
-    List<String> v = new ArrayList<String>();
-    String accept = "";
+    List<String> v = new ArrayList<>();
+    StringBuilder accept = new StringBuilder();
     for (String ext : extensions) {
       if (ext == null) {
         continue;
       }
       if (ext.contains("/")) {
-        accept += (accept.isEmpty() ? "" : ",") + ext;
+        accept.append((accept.length() == 0) ? "" : ",").append(ext);
         continue;
       }
       if (!ext.startsWith(".")) ext = "." + ext;
-      accept += (accept.isEmpty() ? "" : ",") + ext;
+      accept.append((accept.length() == 0) ? "" : ",").append(ext);
 
       validExtensionsMsg += (validExtensionsMsg.isEmpty() ? "" : ",") + ext;
       ext = ext.replaceAll("\\.", "\\\\.");
       ext = ".+" + ext;
       validExtensions.add(ext);
     }
-    fileInput.setAccept(accept);
+    fileInput.setAccept(accept.toString());
   }
 
   public void setValidExtensions(String ext) {
@@ -1218,8 +1215,8 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
       return;
     } else if (Utils.getXmlNodeValue(doc, TAG_PERCENT) != null) {
       lastData = now();
-      long transferredKB = Long.valueOf(Utils.getXmlNodeValue(doc, TAG_CURRENT_BYTES)) / 1024;
-      long totalKB = Long.valueOf(Utils.getXmlNodeValue(doc, TAG_TOTAL_BYTES)) / 1024;
+      long transferredKB = Long.parseLong(Utils.getXmlNodeValue(doc, TAG_CURRENT_BYTES)) / 1024;
+      long totalKB = Long.parseLong(Utils.getXmlNodeValue(doc, TAG_TOTAL_BYTES)) / 1024;
       statusWidget.setProgress(transferredKB, totalKB);
       log("server response transferred  " + transferredKB + "/" + totalKB + " " + getFileNames(), null);
       if (onSubmitComplete) {
@@ -1367,7 +1364,7 @@ public class Uploader extends Composite implements IsUpdateable, IUploader, HasJ
     Hidden hidden = new Hidden(name, value);
     uploadForm.add(hidden);
     if (hiddens == null) {
-      hiddens = new ArrayList<Hidden>();
+      hiddens = new ArrayList<>();
     }
     hiddens.add(hidden);
     return hidden;

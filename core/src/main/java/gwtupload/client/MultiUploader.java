@@ -41,7 +41,7 @@ public class MultiUploader extends AbstractMultiUploader<FlowPanel> {
     super(getPanel(), status, fileInput);
   }
 
-  private static final FlowPanel getPanel() {
+  private static FlowPanel getPanel() {
     return new FlowPanel();
   }
 }

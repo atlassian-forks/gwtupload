@@ -205,7 +205,7 @@ public class SingleUploader extends Uploader {
     }
   }
 
-  ArrayList<Widget> formWidgets = new ArrayList<Widget>();
+  ArrayList<Widget> formWidgets = new ArrayList<>();
 
   public void add(Widget w) {
     formWidgets.add(w);
@@ -292,7 +292,7 @@ public class SingleUploader extends Uploader {
    */
   @UiChild(limit = 1, tagname = "statusBar")
   public void addStatusBar(IUploadStatus status) {
-    this.setStatusWidget((IUploadStatus) status);
+    this.setStatusWidget(status);
   }
 
   /**

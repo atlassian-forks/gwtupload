@@ -47,36 +47,36 @@ public final class Utils {
     if (node.getNodeType() != Node.ELEMENT_NODE) {
       return null;
     }
-    String ret = "";
+    StringBuilder ret = new StringBuilder();
     NodeList textNodes = node.getChildNodes();
     for (int i = 0; i < textNodes.getLength(); i++) {
       Node n = textNodes.item(i);
       if (n.getNodeType() == Node.TEXT_NODE
           && !n.getNodeValue().replaceAll("[ \\n\\t\\r]", "").isEmpty()) {
-        ret += n.getNodeValue();
+        ret.append(n.getNodeValue());
       } else if (n.getNodeType() == Node.CDATA_SECTION_NODE) {
-        ret += n.getNodeValue();
+        ret.append(n.getNodeValue());
       }
     }
-    return ret.isEmpty() ? null : ret.replaceAll("^\\s+", "").replaceAll("\\s+$", "");
+    return (ret.length() == 0) ? null : ret.toString().replaceAll("^\\s+", "").replaceAll("\\s+$", "");
   }
 
   public static String getXmlNodeValue(Node node) {
     if (node.getNodeType() != Node.ELEMENT_NODE) {
       return null;
     }
-    String ret = "";
+    StringBuilder ret = new StringBuilder();
     NodeList textNodes = node.getChildNodes();
     for (int i = 0; i < textNodes.getLength(); i++) {
       Node n = textNodes.item(i);
       if (n.getNodeType() == Node.TEXT_NODE
           && !n.getNodeValue().replaceAll("[ \\n\\t\\r]", "").isEmpty()) {
-        ret += n.getNodeValue();
+        ret.append(n.getNodeValue());
       } else if (n.getNodeType() == Node.CDATA_SECTION_NODE) {
-        ret += n.getNodeValue();
+        ret.append(n.getNodeValue());
       }
     }
-    return ret.isEmpty() ? null : ret.replaceAll("^\\s+", "").replaceAll("\\s+$", "");
+    return (ret.length() == 0) ? null : ret.toString().replaceAll("^\\s+", "").replaceAll("\\s+$", "");
   }
 
   /**
@@ -102,16 +102,16 @@ public final class Utils {
   }
 
   public static String convertCollectionToString(Collection<String> strings, String separator) {
-    String result = "";
+    StringBuilder result = new StringBuilder();
     boolean first = true;
     for (String s : strings) {
       if (first) {
-        result += s;
+        result.append(s);
         first = false;
       } else {
-        result += separator + s;
+        result.append(separator).append(s);
       }
     }
-    return result;
+    return result.toString();
   }
 }

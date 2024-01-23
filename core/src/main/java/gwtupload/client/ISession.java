@@ -108,18 +108,18 @@ public interface ISession {
     }
 
     public String composeURL(String... params) {
-      String ret = servletPath;
-      ret = ret.replaceAll("[\\?&]+$", "");
-      String sep = ret.contains("?") ? "&" : "?";
+      StringBuilder ret = new StringBuilder(servletPath);
+      ret = new StringBuilder(ret.toString().replaceAll("[\\?&]+$", ""));
+      String sep = ret.toString().contains("?") ? "&" : "?";
       for (String par : params) {
-        ret += sep + par;
+        ret.append(sep).append(par);
         sep = "&";
       }
       for (Entry<String, List<String>> e : Window.Location.getParameterMap().entrySet()) {
-        ret += sep + e.getKey() + "=" + e.getValue().get(0);
+        ret.append(sep).append(e.getKey()).append("=").append(e.getValue().get(0));
       }
-      ret += sep + "random=" + Math.random();
-      return ret;
+      ret.append(sep).append("random=").append(Math.random());
+      return ret.toString();
     }
   }
 

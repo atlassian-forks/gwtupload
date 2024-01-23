@@ -42,14 +42,14 @@ import gwtupload.client.FileList;
 public class DragAndDropFilesProvider implements HasValueChangeHandlers<FileList> {
 
   private static Map<HasAllDragAndDropHandlers, List<HandlerRegistration>> handlerRegistrationsMap =
-      new HashMap<HasAllDragAndDropHandlers, List<HandlerRegistration>>();
+          new HashMap<>();
 
   private static void rememberHandlerRegistration(HasAllDragAndDropHandlers dropZoneWidget,
       HandlerRegistration handler) {
     List<HandlerRegistration> handlerRegistrationsList =
         handlerRegistrationsMap.get(dropZoneWidget);
     if (handlerRegistrationsList == null) {
-      handlerRegistrationsList = new ArrayList<HandlerRegistration>();
+      handlerRegistrationsList = new ArrayList<>();
       handlerRegistrationsMap.put(dropZoneWidget, handlerRegistrationsList);
     }
     handlerRegistrationsList.add(handler);
@@ -190,7 +190,7 @@ public class DragAndDropFilesProvider implements HasValueChangeHandlers<FileList
   }
 
   public static List<String> getFilenames(FileList fileList) {
-    ArrayList<String> result = new ArrayList<String>();
+    ArrayList<String> result = new ArrayList<>();
     if (fileList != null) {
       for (int i = 0; i < fileList.getLength(); i++) {
         result.add(fileList.item(i).getName());

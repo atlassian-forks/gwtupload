@@ -126,7 +126,7 @@ public class BlobstoreUploadAction extends UploadAction {
       }
     } else if (request.getParameter(PARAM_REDIRECT) != null) {
       perThreadRequest.set(request);
-      Map<String, String> stat = new HashMap<String, String>();
+      Map<String, String> stat = new HashMap<>();
       if (request.getParameter(PARAM_ERROR) != null) {
         stat.put(TAG_ERROR, request.getParameter(PARAM_ERROR));
       } else if (request.getParameter(PARAM_CANCEL) != null) {
@@ -179,7 +179,7 @@ public class BlobstoreUploadAction extends UploadAction {
 
     List<FileItem> sessionFiles = getLastReceivedFileItems(request);
     if (sessionFiles == null) {
-      sessionFiles = new ArrayList<FileItem>();
+      sessionFiles = new ArrayList<>();
       request.setAttribute(getSessionLastFilesKey(request), sessionFiles);
     }
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);

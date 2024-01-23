@@ -68,7 +68,7 @@ public class MemoryFileItemFactory implements FileItemFactory, Serializable {
     }
 
     @Override
-    public void write(int b) throws IOException {
+    public void write(int b) {
       buff[size++] = (byte) b;
     }
   }
@@ -79,7 +79,7 @@ public class MemoryFileItemFactory implements FileItemFactory, Serializable {
 
   int requestSize;
 
-  private HashMap<String, Integer> map = new HashMap<String, Integer>();
+  private HashMap<String, Integer> map = new HashMap<>();
 
   public MemoryFileItemFactory() {
     this(DEFAULT_REQUEST_SIZE);
@@ -96,8 +96,6 @@ public class MemoryFileItemFactory implements FileItemFactory, Serializable {
     final String fName = fieldName.replace(MULTI_SUFFIX, "") + "-" + cont;
 
     return new FileItem() {
-
-      private static final long serialVersionUID = 1L;
       String ctype;
       SerializableByteArrayOutputStream data = new SerializableByteArrayOutputStream();
       String fname;

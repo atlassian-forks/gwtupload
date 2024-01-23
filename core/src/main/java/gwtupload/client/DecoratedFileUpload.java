@@ -105,25 +105,6 @@ public class DecoratedFileUpload extends FlowPanel implements HasName, HasChange
    */
   public static class FileUploadWithMouseEvents extends MultipleFileUpload implements HasMouseOverHandlers, HasMouseOutHandlers, HasChangeHandlers {
 
-    public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-      return addDomHandler(handler, ChangeEvent.getType());
-    }
-
-    public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-      return addDomHandler(handler, MouseOutEvent.getType());
-    }
-
-    public HandlerRegistration addMouseOverHandler(final MouseOverHandler handler) {
-      return addDomHandler(handler, MouseOverEvent.getType());
-    }
-
-    public boolean isEnabled() {
-      return !getElement().getPropertyBoolean("disabled");
-    }
-
-    public void setEnabled(boolean enabled) {
-      getElement().setPropertyBoolean("disabled", !enabled);
-    }
   }
 
   /**
@@ -177,7 +158,7 @@ public class DecoratedFileUpload extends FlowPanel implements HasName, HasChange
    */
   private static class DecoratedFileUploadImplClick extends DecoratedFileUploadImpl {
 
-    private static HashMap<Widget, HandlerRegistration> clickHandlerCache = new HashMap<Widget, HandlerRegistration>();
+    private static HashMap<Widget, HandlerRegistration> clickHandlerCache = new HashMap<>();
 
     private static native void clickOnInputFile(Element elem) /*-{
       elem.click();

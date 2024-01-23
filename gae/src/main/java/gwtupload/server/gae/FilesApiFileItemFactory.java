@@ -80,7 +80,6 @@ public class FilesApiFileItemFactory implements FileItemFactory, Serializable {
   }
 
   public static class FilesAPIFileItem implements FileItem, HasBlobKey {
-    private static final long serialVersionUID = 3683112300714613746L;
     private String field;
     private String type;
     private boolean formField;
@@ -202,7 +201,7 @@ public class FilesApiFileItemFactory implements FileItemFactory, Serializable {
     }
   }
 
-  private HashMap<String, Integer> map = new HashMap<String, Integer>();
+  private HashMap<String, Integer> map = new HashMap<>();
 
   public FileItem createItem(String fieldName, String contentType,
       boolean isFormField, String fileName) {

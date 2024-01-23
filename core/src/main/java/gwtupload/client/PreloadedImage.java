@@ -50,8 +50,8 @@ public class PreloadedImage extends Image implements HasJsData {
 
   private PreloadedImage thisInstance;
   private String containerId;
-  private HandlerRegistration errHandler = null;
-  private ErrorHandler imgErrorListener = new ErrorHandler() {
+  private HandlerRegistration errHandler;
+  private final ErrorHandler imgErrorListener = new ErrorHandler() {
     public void onError(ErrorEvent event) {
       loadHandler.removeHandler();
       errHandler.removeHandler();
@@ -64,7 +64,7 @@ public class PreloadedImage extends Image implements HasJsData {
       }
     }
   };
-  private LoadHandler imgLoadListener = new LoadHandler() {
+  private final LoadHandler imgLoadListener = new LoadHandler() {
     public void onLoad(LoadEvent event) {
       loadHandler.removeHandler();
       errHandler.removeHandler();

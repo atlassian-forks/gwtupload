@@ -127,7 +127,7 @@ public class AbstractMultiUploader<T extends IsWidget & HasWidgets.ForIsWidget> 
 
   private IUploadStatus statusWidget = null;
 
-  private List<IUploader> uploaders = new ArrayList<IUploader>();
+  private List<IUploader> uploaders = new ArrayList<>();
 
   public List<IUploader> getUploaders() {
     return uploaders;
@@ -196,7 +196,7 @@ public class AbstractMultiUploader<T extends IsWidget & HasWidgets.ForIsWidget> 
     setFileInput(fileInput);
   }
 
-  ArrayList<Widget> formWidgets = new ArrayList<Widget>();
+  ArrayList<Widget> formWidgets = new ArrayList<>();
 
   /* (non-Javadoc)
   * @see com.google.gwt.user.client.ui.HasWidgets#add(com.google.gwt.user.client.ui.Widget)
@@ -439,7 +439,7 @@ public class AbstractMultiUploader<T extends IsWidget & HasWidgets.ForIsWidget> 
   public void reset() {
     currentUploader.reset();
     currentUploader = null;
-    uploaders = new ArrayList<IUploader>();
+    uploaders = new ArrayList<>();
     multiUploaderPanel.clear();
     newUploaderInstance();
   }
@@ -630,7 +630,7 @@ public class AbstractMultiUploader<T extends IsWidget & HasWidgets.ForIsWidget> 
    */
   @UiChild(limit = 1, tagname = "statusBar")
   public void addStatusBar(IUploadStatus status) {
-    this.setStatusWidget((IUploadStatus) status);
+    this.setStatusWidget(status);
   }
 
   /**

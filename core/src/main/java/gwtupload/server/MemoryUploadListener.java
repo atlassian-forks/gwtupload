@@ -35,7 +35,7 @@ public class MemoryUploadListener extends AbstractUploadListener {
 
   private static final long serialVersionUID = 7395899170157906525L;
 
-  private static final Map<String, MemoryUploadListener>  listeners = new HashMap<String, MemoryUploadListener>();
+  private static final Map<String, MemoryUploadListener>  listeners = new HashMap<>();
 
   public static MemoryUploadListener current(String sessionId) {
     MemoryUploadListener listener = listeners.get(sessionId);

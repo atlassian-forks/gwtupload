@@ -79,7 +79,7 @@ public class DragAndDropFormPanel extends FormPanel {
     if (childFileInputs == null || childFileInputs.isEmpty()) {
       return;
     }
-    final ArrayList<IDragAndDropFileInput> dndFileInputs = new ArrayList<IDragAndDropFileInput>();
+    final ArrayList<IDragAndDropFileInput> dndFileInputs = new ArrayList<>();
     boolean thereAreNonDragAndDropFileInputs = false;
     for (IFileInput fileInput : childFileInputs) {
       if (fileInput instanceof IDragAndDropFileInput) {
@@ -103,9 +103,8 @@ public class DragAndDropFormPanel extends FormPanel {
     }
   }
   private static DragAndDropFormPanel currentInstance = null;
-  private XMLHttpRequest request = null;
 
-  private void submitDragAndDropFileInputs(ArrayList<IDragAndDropFileInput> dndFileInputs) {
+    private void submitDragAndDropFileInputs(ArrayList<IDragAndDropFileInput> dndFileInputs) {
 
     // Fire the onSubmit event, because javascript's form.submit() does not
     // fire the built-in onsubmit event.
@@ -123,7 +122,7 @@ public class DragAndDropFormPanel extends FormPanel {
       if (files != null && files.getLength() > 0) {
         fileInput.lock();
         currentInstance = this;
-        request = jsSubmit(getAction(), getMethod(), fileInput.getName(), files, dndFileInputs);
+        jsSubmit(getAction(), getMethod(), fileInput.getName(), files, dndFileInputs);
       }
     }
   }
@@ -140,7 +139,7 @@ public class DragAndDropFormPanel extends FormPanel {
   }
 
   private List<IFileInput> getChildFileInputs() {
-    final List<IFileInput> res = new ArrayList<IFileInput>();
+    final List<IFileInput> res = new ArrayList<>();
     findChildFileInputs(res, iterator());
     return res;
   }
@@ -192,9 +191,5 @@ public class DragAndDropFormPanel extends FormPanel {
 
   protected static void abortIfRunning() {
     currentInstance = null;
-//     if (currentInstance != null) {
-//      currentInstance.request.abort();
-//      currentInstance.onSubmitComplete(null, 0, null);
-//    }
   }
 }

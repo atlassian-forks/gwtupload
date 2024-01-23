@@ -46,9 +46,8 @@ public class ChismesUploadProgress extends BaseUploadStatus {
   boolean asDialog = false;
 
   GWTCProgress prg;
-  private String prgBarText = "{0}% {1}/{2} KB. ({3} KB/s)";
-  
-  public ChismesUploadProgress() {
+
+    public ChismesUploadProgress() {
     this(false);
   }
 
@@ -58,7 +57,8 @@ public class ChismesUploadProgress extends BaseUploadStatus {
     setProgressWidget(prg);
     panel.add(prg);
     prg.setVisible(true);
-    setPercentMessage(prgBarText);
+      String prgBarText = "{0}% {1}/{2} KB. ({3} KB/s)";
+      setPercentMessage(prgBarText);
   }
   
   

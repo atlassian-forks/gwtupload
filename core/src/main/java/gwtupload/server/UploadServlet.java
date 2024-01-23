@@ -157,7 +157,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
 
   protected static UploadLogger logger = UploadLogger.getLogger(UploadServlet.class);
 
-  protected static final ThreadLocal<HttpServletRequest> perThreadRequest = new ThreadLocal<HttpServletRequest>();
+  protected static final ThreadLocal<HttpServletRequest> perThreadRequest = new ThreadLocal<>();
 
   private static boolean appEngine = false;
 
@@ -297,7 +297,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
     return new MessageFormat(msg, loc).format(pars);
   }
 
-  public static final HttpServletRequest getThreadLocalRequest() {
+  public static HttpServletRequest getThreadLocalRequest() {
     return perThreadRequest.get();
   }
 
@@ -552,7 +552,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
         uploadDelay = DEFAULT_SLOW_DELAY_MILLIS;
       } else {
         try {
-          uploadDelay = Integer.valueOf(slow);
+          uploadDelay = Integer.parseInt(slow);
         } catch (NumberFormatException e) {
         }
       }
@@ -649,15 +649,15 @@ public class UploadServlet extends HttpServlet implements Servlet {
   }
 
   protected String statusToString(Map<String, String> stat) {
-    String message = "";
+    StringBuilder message = new StringBuilder();
     for (Entry<String, String> e : stat.entrySet()) {
       if (e.getValue() != null) {
         String k = e.getKey();
         String v = e.getValue().replaceAll("</*pre>", "").replaceAll("&lt;", "<").replaceAll("&gt;", ">");
-        message += "<" + k + ">" + v + "</" + k + ">\n";
+        message.append("<").append(k).append(">").append(v).append("</").append(k).append(">\n");
       }
     }
-    return message;
+    return message.toString();
   }
 
   /**
@@ -672,7 +672,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
     String error;
     try {
       error = parsePostRequest(request, response);
-      Map<String, String> stat = new HashMap<String, String>();
+      Map<String, String> stat = new HashMap<>();
       if (error != null && !error.isEmpty()) {
         stat.put(TAG_ERROR, error);
       } else {
@@ -698,48 +698,48 @@ public class UploadServlet extends HttpServlet implements Servlet {
 
   protected Map<String, String> getFileItemsSummary(HttpServletRequest request, Map<String, String> stat) {
     if (stat == null) {
-      stat = new HashMap<String, String>();
+      stat = new HashMap<>();
     }
     List<FileItem> s = getMyLastReceivedFileItems(request);
     if (s != null) {
-      String files = "";
-      String params = "";
+      StringBuilder files = new StringBuilder();
+      StringBuilder params = new StringBuilder();
       for (FileItem i : s) {
         if (i.isFormField()) {
-          params += formFieldToXml(i);
+          params.append(formFieldToXml(i));
         } else {
-          files += fileFieldToXml(i);
+          files.append(fileFieldToXml(i));
         }
       }
-      stat.put(TAG_FILES, files);
-      stat.put(TAG_PARAMS, params);
+      stat.put(TAG_FILES, files.toString());
+      stat.put(TAG_PARAMS, params.toString());
       stat.put(TAG_FINISHED, "ok");
     }
     return stat;
   }
 
   private String formFieldToXml(FileItem i) {
-    Map<String, String> item = new HashMap<String, String>();
-    item.put(TAG_VALUE, "" + i.getString());
-    item.put(TAG_FIELD, "" + i.getFieldName());
+    Map<String, String> item = new HashMap<>();
+    item.put(TAG_VALUE, i.getString());
+    item.put(TAG_FIELD, i.getFieldName());
 
-    Map<String, String> param = new HashMap<String, String>();
+    Map<String, String> param = new HashMap<>();
     param.put(TAG_PARAM, statusToString(item));
     return statusToString(param);
   }
 
   private String fileFieldToXml(FileItem i) {
-    Map<String, String> item = new HashMap<String, String>();
+    Map<String, String> item = new HashMap<>();
     item.put(TAG_CTYPE, i.getContentType() !=null ? i.getContentType() : "unknown");
     item.put(TAG_SIZE, "" + i.getSize());
-    item.put(TAG_NAME, "" + i.getName());
-    item.put(TAG_FIELD, "" + i.getFieldName());
+    item.put(TAG_NAME, i.getName());
+    item.put(TAG_FIELD, i.getFieldName());
     if (i instanceof HasKey) {
       String k = ((HasKey)i).getKeyString();
       item.put(TAG_KEY, k);
     }
 
-    Map<String, String> file = new HashMap<String, String>();
+    Map<String, String> file = new HashMap<>();
     file.put(TAG_FILE, statusToString(item));
     return statusToString(file);
   }
@@ -791,7 +791,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
     HttpSession session = request.getSession();
 
     if (ret == null) {
-      ret = new HashMap<String, String>();
+      ret = new HashMap<>();
     }
 
     long currentBytes = 0;
@@ -902,15 +902,15 @@ public class UploadServlet extends HttpServlet implements Servlet {
       // Received files are put in session
       List<FileItem> sessionFiles = getMySessionFileItems(request);
       if (sessionFiles == null) {
-        sessionFiles = new ArrayList<FileItem>();
+        sessionFiles = new ArrayList<>();
       }
 
       String error = "";
       if (!uploadedItems.isEmpty()) {
         sessionFiles.addAll(uploadedItems);
-        String msg = "";
+        StringBuilder msg = new StringBuilder();
         for (FileItem i : sessionFiles) {
-          msg += i.getFieldName() + " => " + i.getName() + "(" + i.getSize() + " bytes),";
+          msg.append(i.getFieldName()).append(" => ").append(i.getName()).append("(").append(i.getSize()).append(" bytes),");
         }
         logger.debug("UPLOAD-SERVLET (" + session.getId() + ") puting items in session: " + msg);
         session.setAttribute(getSessionFilesKey(request), sessionFiles);
@@ -931,13 +931,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
       RuntimeException ex = new UploadSizeLimitException(e.getPermittedSize(), e.getActualSize());
       listener.setException(ex);
       throw ex;
-    } catch (UploadSizeLimitException e) {
-      listener.setException(e);
-      throw e;
-    } catch (UploadCanceledException e) {
-      listener.setException(e);
-      throw e;
-    } catch (UploadTimeoutException e) {
+    } catch (UploadSizeLimitException | UploadCanceledException | UploadTimeoutException e) {
       listener.setException(e);
       throw e;
     } catch (Throwable e) {
@@ -991,7 +985,7 @@ public class UploadServlet extends HttpServlet implements Servlet {
    * DiskFileItemFactory for Multiple file selection.
    */
   public static class DefaultFileItemFactory extends DiskFileItemFactory {
-    private HashMap<String, Integer> map = new HashMap<String, Integer>();
+    private HashMap<String, Integer> map = new HashMap<>();
 
     @Override
     public FileItem createItem(String fieldName, String contentType, boolean isFormField, String fileName) {

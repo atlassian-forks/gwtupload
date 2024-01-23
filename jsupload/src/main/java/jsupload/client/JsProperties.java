@@ -123,7 +123,7 @@ public class JsProperties {
   }
 
   public double getDouble(String name) {
-    return (double) getDoubleImpl(p, name);
+    return getDoubleImpl(p, name);
   }
 
   public float getFloat(String name) {
@@ -137,7 +137,7 @@ public class JsProperties {
   public int getInt(String name, int deFault) {
     String val = defined(name) ? get(name).replaceAll("[^\\d]", "") : "";
     if (val.isEmpty()) { return deFault; }
-    return Integer.valueOf(val);
+    return Integer.parseInt(val);
   }
 
   public JsProperties getJsProperties(String name) {
@@ -148,20 +148,20 @@ public class JsProperties {
     JsArrayString a = keysImpl(p);
     String[] ret = new String[a.length()];
     for (int i = 0; i < a.length(); i++) {
-      ret[i] = "" + a.get(i);
+      ret[i] = a.get(i);
     }
     return ret;
   }
 
   public String toString() {
-    String ret = "";
+    StringBuilder ret = new StringBuilder();
     if (p == null) {
-      ret = "null";
+      ret = new StringBuilder("null");
     } else {
       for (String k : keys()) {
-        ret += k + ":" + get(k) + ",";
+        ret.append(k).append(":").append(get(k)).append(",");
       }
     }
-    return ret;
+    return ret.toString();
   }
 }

@@ -23,7 +23,7 @@ public class MultipleFileUpload extends FileUpload {
   }
 
   public List<String> getFilenames() {
-    ArrayList<String> result = new ArrayList<String>();
+    ArrayList<String> result = new ArrayList<>();
 
     JavaScriptObject rawFileList = getElement().getPropertyJSO("files");
     if (rawFileList == null) {

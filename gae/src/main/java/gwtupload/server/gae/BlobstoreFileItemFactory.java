@@ -23,7 +23,6 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileItemHeaders;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -169,7 +168,7 @@ public class BlobstoreFileItemFactory implements FileItemFactory, Serializable {
     }
   }
 
-  private HashMap<String, Integer> map = new HashMap<String, Integer>();
+  private HashMap<String, Integer> map = new HashMap<>();
 
   public BlobstoreFileItemFactory() {
   }

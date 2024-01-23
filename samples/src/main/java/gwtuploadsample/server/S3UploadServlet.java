@@ -156,21 +156,18 @@ public class S3UploadServlet extends HttpServlet {
     response.setContentType("text/plain; charset=UTF-8");
     PrintWriter out = response.getWriter();
 
-    StringBuilder xml = new StringBuilder();
-    xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    xml.append(
-      "<response>" +
-        "<" + UConsts.TAG_FIELD + ">" + StringEscapeUtils.escapeXml(request.getParameter("key")) + "</" + UConsts.TAG_FIELD + ">" +
-        "<" + UConsts.TAG_FILE + ">" +
-          "<" + UConsts.TAG_CTYPE + "> </" + UConsts.TAG_CTYPE + ">" + // content-type is unknown
-          "<" + UConsts.TAG_SIZE + ">0</" + UConsts.TAG_SIZE + ">" + // size is unknown
-          "<" + UConsts.TAG_NAME + ">" + StringEscapeUtils.escapeXml(request.getParameter("key")) + "</" + UConsts.TAG_NAME + ">" +
-        "</" + UConsts.TAG_FILE + ">" +
-        "<" + UConsts.TAG_FINISHED + ">" + UConsts.TAG_OK + "</" + UConsts.TAG_FINISHED + ">" +
-        "<" + UConsts.TAG_MESSAGE + "><![CDATA[ok]]></" + UConsts.TAG_MESSAGE + ">" +
-      "</response>"
-    );
-    out.print(UConsts.TAG_MSG_START + xml.toString().replaceAll("<", UConsts.TAG_MSG_LT).replaceAll(">", UConsts.TAG_MSG_GT) + UConsts.TAG_MSG_END);
+      String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+              "<response>" +
+              "<" + UConsts.TAG_FIELD + ">" + StringEscapeUtils.escapeXml(request.getParameter("key")) + "</" + UConsts.TAG_FIELD + ">" +
+              "<" + UConsts.TAG_FILE + ">" +
+              "<" + UConsts.TAG_CTYPE + "> </" + UConsts.TAG_CTYPE + ">" + // content-type is unknown
+              "<" + UConsts.TAG_SIZE + ">0</" + UConsts.TAG_SIZE + ">" + // size is unknown
+              "<" + UConsts.TAG_NAME + ">" + StringEscapeUtils.escapeXml(request.getParameter("key")) + "</" + UConsts.TAG_NAME + ">" +
+              "</" + UConsts.TAG_FILE + ">" +
+              "<" + UConsts.TAG_FINISHED + ">" + UConsts.TAG_OK + "</" + UConsts.TAG_FINISHED + ">" +
+              "<" + UConsts.TAG_MESSAGE + "><![CDATA[ok]]></" + UConsts.TAG_MESSAGE + ">" +
+              "</response>";
+    out.print(UConsts.TAG_MSG_START + xml.replaceAll("<", UConsts.TAG_MSG_LT).replaceAll(">", UConsts.TAG_MSG_GT) + UConsts.TAG_MSG_END);
   }
 
   private void doShow(HttpServletRequest request, HttpServletResponse response) {

@@ -26,7 +26,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import java.util.EnumSet;
 
@@ -143,7 +142,7 @@ public class MultipleUploadSample implements EntryPoint {
     customExternalDropZone.getElement().getStyle().setBorderWidth(1, Style.Unit.PX);
     customExternalDropZone.getElement().getStyle().setPadding(10, Unit.PX);
     MultiUploader customExternalDragDropUploader = new MultiUploader(
-            FileInputType.CUSTOM.with((Widget)new Button("Click me or drag and drop files below")).withZone(customExternalDropZone));
+            FileInputType.CUSTOM.with(new Button("Click me or drag and drop files below")).withZone(customExternalDropZone));
     customExternalDragDropUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
     RootPanel.get("custom_external_dropzone").add(customExternalDragDropUploader);
     RootPanel.get("custom_external_dropzone").add(customExternalDropZone);

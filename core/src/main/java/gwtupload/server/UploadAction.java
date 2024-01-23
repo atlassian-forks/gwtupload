@@ -57,8 +57,8 @@ public class UploadAction extends UploadServlet {
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
     ServletContext ctx = config.getServletContext();
-    removeSessionFiles = Boolean.valueOf(ctx.getInitParameter("removeSessionFiles"));
-    removeData = Boolean.valueOf(ctx.getInitParameter("removeData"));
+    removeSessionFiles = Boolean.parseBoolean(ctx.getInitParameter("removeSessionFiles"));
+    removeData = Boolean.parseBoolean(ctx.getInitParameter("removeData"));
 
     logger.info("UPLOAD-ACTION init: removeSessionFiles=" + removeSessionFiles + ", removeData=" + removeData);
   }
@@ -139,7 +139,7 @@ public class UploadAction extends UploadServlet {
         // Notify classes extending this that they have to remove the item.
         removeItem(request, parameter);
         // Other way to notify classes extending this.
-        FileItem item = super.findFileItem(getMySessionFileItems(request), parameter);
+        FileItem item = findFileItem(getMySessionFileItems(request), parameter);
         if (item != null) {
           removeItem(request, item);
         }
@@ -148,7 +148,7 @@ public class UploadAction extends UploadServlet {
         return;
       }
       // Remove the item saved in session in the case it was not removed yet
-      super.removeUploadedFile(request, response);
+      removeUploadedFile(request, response);
     } else {
       super.doGet(request, response);
     }
@@ -157,7 +157,7 @@ public class UploadAction extends UploadServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String error = null;
     String message = null;
-    Map<String, String> tags = new HashMap<String, String>();
+    Map<String, String> tags = new HashMap<>();
 
     perThreadRequest.set(request);
     try {
