@@ -1,288 +1,274 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.googlecode.gwtupload</groupId>
-  <artifactId>gwtupload-project</artifactId>
-  <name>GwtUpload project</name>
-  <packaging>pom</packaging>
-  <version>1.0.3-atlassian-1</version>
+    <parent>
+        <groupId>com.atlassian.pom</groupId>
+        <artifactId>public-pom</artifactId>
+        <version>6.3.1</version>
+    </parent>
 
-  <modules>
-    <module>core</module>
-    <module>gae</module>
-    <module>jsupload</module>
-    <module>samples</module>
-  </modules>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.googlecode.gwtupload</groupId>
+    <artifactId>gwtupload-project</artifactId>
+    <name>GwtUpload project</name>
+    <packaging>pom</packaging>
+    <version>1.0.3-atlassian-1</version>
 
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>7</version>
-  </parent>
+    <modules>
+        <module>core</module>
+        <module>gae</module>
+        <module>jsupload</module>
+        <module>samples</module>
+    </modules>
 
-  <properties>
-    <main.basedir>${project.basedir}</main.basedir>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <gwtVersion>2.9.0</gwtVersion>
-    <gwtMaven>2.9.0</gwtMaven>
-    <commonsFileuploadVersion>1.5</commonsFileuploadVersion>
-    <commonsIoVersion>2.15.0</commonsIoVersion>
-    <gwtChismesVersion>0.9.7</gwtChismesVersion>
-    <gwtExporterVersion>2.5.1</gwtExporterVersion>
-    <gwtIncubatorVersion>2.0.1</gwtIncubatorVersion>
-    <junitVersion>4.13.2</junitVersion>
-    <log4jVersion>1.2.17</log4jVersion>
-    <downloadLabel>Beta</downloadLabel>
-    <localMavenRepo>file:${env.HOME}/workspace/GWTUpload-mavenrepo</localMavenRepo>
-    <gae.version>1.9.17</gae.version>
-    <sonatypeRepoId>sonatype-nexus-snapshots</sonatypeRepoId>
-    <sonatypeUrl>http://oss.sonatype.org/content/repositories/snapshots</sonatypeUrl>
-    <wikiSvnExec>true</wikiSvnExec>
-  </properties>
+    <properties>
+        <main.basedir>${project.basedir}</main.basedir>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <gwtVersion>2.9.0</gwtVersion>
+        <gwtMaven>2.9.0</gwtMaven>
+        <gae.version>1.9.17</gae.version>
+        <sonatypeRepoId>sonatype-nexus-snapshots</sonatypeRepoId>
+        <sonatypeUrl>https://oss.sonatype.org/content/repositories/snapshots</sonatypeUrl>
+        <wikiSvnExec>true</wikiSvnExec>
+    </properties>
 
-  <distributionManagement>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      <uniqueVersion>false</uniqueVersion>
-    </snapshotRepository>
-  </distributionManagement>
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <sonatypeRepoId>sonatype-nexus-staging</sonatypeRepoId>
+                <sonatypeUrl>https://oss.sonatype.org/service/local/staging/deploy/maven2</sonatypeUrl>
+                <wikiSvnExec>git</wikiSvnExec>
+            </properties>
+        </profile>
+    </profiles>
 
-  <profiles>
-     <profile>
-       <id>2.0.4</id>
-       <properties>
-         <gwtVersion>2.0.4</gwtVersion>
-         <gwtMaven>1.3-SNAPSHOT</gwtMaven>
-       </properties>
-     </profile>
-     <profile>
-       <id>2.2.0</id>
-       <properties>
-         <gwtVersion>2.2.0</gwtVersion>
-         <gwtMaven>2.1.0-1</gwtMaven>
-       </properties>
-       <dependencies>
-       <dependency>
-         <groupId>com.google.gwt</groupId>
-         <artifactId>gwt-dev</artifactId>
-         <version>${gwtVersion}</version>
-         <scope>provided</scope>
-       </dependency>
-       </dependencies>
-     </profile>
-     <profile>
-       <id>prod</id>
-       <properties>
-        <sonatypeRepoId>sonatype-nexus-staging</sonatypeRepoId>
-        <sonatypeUrl>http://oss.sonatype.org/service/local/staging/deploy/maven2</sonatypeUrl>
-        <wikiSvnExec>git</wikiSvnExec>
-       </properties>
-     </profile>
-  </profiles>
+    <description>
+        GWTUpload is a library for uploading files to web servers,
+        showing a progress bar with real information about the process (file size, bytes transferred, etc).
+        It uses ajax requests to ask the web server for the upload progress.
+        It has two components written in java, the server side with servlet and utility classes,
+        and the client side that is compiled into javascript using gwt.
 
-  <dependencies>
-    <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-user</artifactId>
-      <version>${gwtVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>${log4jVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-fileupload</groupId>
-      <artifactId>commons-fileupload</artifactId>
-      <version>${commonsFileuploadVersion}</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>${commonsIoVersion}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.manolo.gwtchismes</groupId>
-      <artifactId>gwtchismes</artifactId>
-      <version>${gwtChismesVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.gwt</groupId>
-      <artifactId>gwt-incubator</artifactId>
-      <version>${gwtIncubatorVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.timepedia.exporter</groupId>
-      <artifactId>gwtexporter</artifactId>
-      <version>${gwtExporterVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.appengine</groupId>
-      <artifactId>appengine-api-1.0-sdk</artifactId>
-      <version>${gae.version}</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
+        GWTUpload-gae is a library with aditional classes needed for using GwtUpload in Google Application Engine (GAE).
 
-  <description>
-   GWTUpload is a library for uploading files to web servers,
-   showing a progress bar with real information about the process (file size, bytes transferred, etc).
-   It uses ajax requests to ask the web server for the upload progress.
-   It has two components written in java, the server side with servlet and utility classes,
-   and the client side that is compiled into javascript using gwt.
+        JSUpload is the client library but compiled and exported into javascript,
+        so users without Gwt skills can use it directly in their web pages.
 
-   GWTUpload-gae is a library with aditional classes needed for using GwtUpload in Google Application Engine (GAE).
+        It includes a bunch of useful examples to learn how to use the library and see its features.
+    </description>
 
-   JSUpload is the client library but compiled and exported into javascript,
-   so users without Gwt skills can use it directly in their web pages.
+    <url>http://code.google.com/p/gwtupload/</url>
 
-   It includes a bunch of useful examples to learn how to use the library and see its features.
-  </description>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
-  <url>http://code.google.com/p/gwtupload/</url>
+    <developers>
+        <developer>
+            <id>manolo</id>
+            <name>Manuel Carrasco Moñino</name>
+            <email>manolo@apache.org</email>
+            <organization>ASF</organization>
+            <roles>
+                <role>Owner</role>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
 
-  <licenses>
-    <license>
-      <name>Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-    </license>
-  </licenses>
+    <ciManagement/>
 
-  <developers>
-    <developer>
-      <id>manolo</id>
-      <name>Manuel Carrasco Moñino</name>
-      <email>manolo@apache.org</email>
-      <organization>ASF</organization>
-      <roles>
-         <role>Owner</role>
-         <role>Developer</role>
-      </roles>
-    </developer>
-  </developers>
+    <mailingLists>
+        <mailingList>
+            <name>gwtupload@googlegroups.com</name>
+            <post>gwtupload@googlegroups.com</post>
+            <archive>http://groups.google.com/group/gwtupload</archive>
+        </mailingList>
+    </mailingLists>
 
-  <ciManagement />
+    <repositories>
+        <repository>
+            <id>repo1</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>seasar</id>
+            <url>https://maven.seasar.org/maven2</url>
+        </repository>
+    </repositories>
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/atlassian-forks/gwtupload/issues</url>
+    </issueManagement>
 
-  <mailingLists>
-    <mailingList>
-      <name>gwtupload@googlegroups.com</name>
-      <post>gwtupload@googlegroups.com</post>
-      <archive>http://groups.google.com/group/gwtupload</archive>
-    </mailingList>
-  </mailingLists>
+    <scm>
+        <connection>scm:git:git@github.com:atlassian-forks/gwtupload.git</connection>
+        <developerConnection>scm:git:git@github.com:atlassian-forks/gwtupload.git</developerConnection>
+        <url>https://github.com/atlassian-forks/gwtupload</url>
+    </scm>
 
-  <repositories>
-    <repository>
-      <id>repo1</id>
-      <url>http://repo1.maven.org/maven2/</url>
-    </repository>
-    <repository>
-      <id>gwtupload</id>
-      <url>http://gwtupload.googlecode.com/svn/mavenrepo/</url>
-    </repository>
-    <repository>
-      <id>gwtchismes</id>
-      <url>http://gwtchismes.googlecode.com/svn/mavenrepo/</url>
-    </repository>
-    <repository>
-      <id>timepedia</id>
-      <url>http://timefire-repository.googlecode.com/svn/mavenrepo/</url>
-    </repository>
-    <repository>
-      <id>seasar</id>
-      <url>http://maven.seasar.org/maven2</url>
-    </repository>
-    <repository>
-      <id>gquery-plugins</id>
-      <url>http://gwtquery-plugins.googlecode.com/svn/mavenrepo</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.15</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>1.5</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.15.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.manolo.gwtchismes</groupId>
+                <artifactId>gwtchismes</artifactId>
+                <version>0.9.7</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-api-1.0-sdk</artifactId>
+                <version>${gae.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-tools-sdk</artifactId>
+                <version>${gae.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>13.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-codeserver</artifactId>
+                <version>${gwtVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-dev</artifactId>
+                <version>${gwtVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-incubator</artifactId>
+                <version>2.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-user</artifactId>
+                <version>${gwtVersion}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.2</version>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.14.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.timepedia.exporter</groupId>
+                <artifactId>gwtexporter</artifactId>
+                <version>2.5.1</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>gwtupload</id>
-      <url>http://gwtupload.googlecode.com/svn/mavenrepo/</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>codehaus.snapshots</id>
-      <url>http://snapshots.repository.codehaus.org/</url>
-    </pluginRepository>
-  </pluginRepositories>
-
-  <issueManagement>
-    <system>Google Code</system>
-    <url>http://code.google.com/p/gwtupload/issues/list</url>
-  </issueManagement>
-  <scm>
-    <connection>scm:git:git@github.com:manolo/gwtupload.git</connection>
-    <developerConnection>scm:git:git@github.com:manolo/gwtupload.git</developerConnection>
-    <url>https://github.com/manolo/gwtupload</url>
-  </scm>
-<!--
-  <distributionManagement>
-    <repository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>googlecode</id>
-      <url>svn:https://gwtupload.googlecode.com/svn/mavenrepo/</url>
-    </repository>
-    <site>
-      <id>googlecode</id>
-      <url>svn:https://gwtupload.googlecode.com/svn/site</url>
-    </site>
-    <snapshotRepository>
-      <uniqueVersion>false</uniqueVersion>
-      <id>localfolder</id>
-      <url>${localMavenRepo}</url>
-    </snapshotRepository>
-  </distributionManagement>
--->
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <descriptors>
-            <descriptor>${basedir}/assembly.xml</descriptor>
-          </descriptors>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.8</version>
-        <configuration>
-          <excludePackageNames>com.google:*</excludePackageNames>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-pmd-plugin</artifactId>
-        <configuration>
-          <targetJdk>1.5</targetJdk>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <configuration>
-          <configLocation>${main.basedir}/gwt-checkstyle.xml</configLocation>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>3.6.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-eclipse-plugin</artifactId>
+                    <version>2.10</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.6.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>3.21.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>gwt-maven-plugin</artifactId>
+                    <version>${gwtMaven}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>${basedir}/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <excludePackageNames>com.google:*</excludePackageNames>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <targetJdk>1.8</targetJdk>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <configLocation>${main.basedir}/gwt-checkstyle.xml</configLocation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

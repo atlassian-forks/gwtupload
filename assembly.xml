@@ -2,23 +2,23 @@
   <formats>
     <format>zip</format>
   </formats>
-  <baseDirectory>/gwtupload-${version}</baseDirectory>
+  <baseDirectory>/gwtupload-${project.version}</baseDirectory>
   <files>
    <file>
      <outputDirectory>/</outputDirectory>
-     <source>core/target/gwtupload-${version}.jar</source>
+     <source>core/target/gwtupload-${project.version}.jar</source>
    </file>
    <file>
      <outputDirectory>/</outputDirectory>
-     <source>gae/target/gwtupload-gae-${version}.jar</source>
+     <source>gae/target/gwtupload-gae-${project.version}.jar</source>
    </file>
    <file>
      <outputDirectory>/</outputDirectory>
-     <source>jsupload/target/jsupload-${version}.zip</source>
+     <source>jsupload/target/jsupload-${project.version}.zip</source>
    </file>
    <file>
      <outputDirectory>/</outputDirectory>
-     <source>samples/target/gwtupload-samples-${version}.war</source>
+     <source>samples/target/gwtupload-samples-${project.version}.war</source>
    </file>
   </files>
   <fileSets>
