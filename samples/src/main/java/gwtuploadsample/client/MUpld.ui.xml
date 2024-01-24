@@ -4,7 +4,7 @@
   xmlns:up="urn:import:gwtupload.client"
   xmlns:j="urn:import:jsupload.client"
   >
-  <ui:style>
+  <ui:style gss="true">
     .myup div {
       font-style: italic;
     }
@@ -23,24 +23,15 @@
 	  text-align: center; 
 	  color: #FFFFFF; 
 	  background-color: #a9db80;
-	  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #a9db80), color-stop(100%, #96c56f));
-	  background-image: -webkit-linear-gradient(top, #a9db80, #96c56f);
-	  background-image: -moz-linear-gradient(top, #a9db80, #96c56f);
-	  background-image: -ms-linear-gradient(top, #a9db80, #96c56f);
-	  background-image: -o-linear-gradient(top, #a9db80, #96c56f);
 	  background-image: linear-gradient(top, #a9db80, #96c56f);
 	  filter: literal("progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a9db80, endColorstr=#96c56f)");
 	}
 
-    @external .DecoratedFileUpload-over;
+    @external '.DecoratedFileUpload-over';
+
 	.DecoratedFileUpload-over .htmlButton {
 	  border:1px solid #74bf36; 
 	  background-color: #8ed058;
-	  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#8ed058), color-stop(100%, #7bb64b));
-	  background-image: -webkit-linear-gradient(top, #8ed058, #7bb64b);
-	  background-image: -moz-linear-gradient(top, #8ed058, #7bb64b);
-	  background-image: -ms-linear-gradient(top, #8ed058, #7bb64b);
-	  background-image: -o-linear-gradient(top, #8ed058, #7bb64b);
 	  background-image: linear-gradient(top, #8ed058, #7bb64b);
 	  filter: literal("progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#8ed058, endColorstr=#7bb64b)");
 	}    

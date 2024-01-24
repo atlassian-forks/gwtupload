@@ -7,6 +7,6 @@ import com.google.gwt.resources.client.CssResource;
 public interface JsUploadCss extends ClientBundle {
     JsUploadCss INSTANCE =  GWT.create(JsUploadCss.class);
 
-    @Source("JsUpload.css")
+    @Source("JsUpload.gss")
     CssResource css();
 }

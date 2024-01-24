@@ -1,7 +1,7 @@
-@external GWTC*;
-@external prg-*;
-@external upld*;
-@external gwt-*;
+@external 'GWTC*';
+@external 'prg-*';
+@external 'upld*';
+@external 'gwt-*';
 
 div.GWTCProgress-dialog {
   border: solid 3px pink;
