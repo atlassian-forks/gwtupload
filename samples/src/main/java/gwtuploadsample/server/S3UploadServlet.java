@@ -4,11 +4,15 @@ import gwtupload.shared.UConsts;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -21,10 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
-
-import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 import static org.apache.commons.text.StringEscapeUtils.escapeXml11;
 
@@ -54,7 +54,7 @@ public class S3UploadServlet extends HttpServlet {
     if (awsSecretKeyString == null) {
       throw new ServletException(getClass().getSimpleName() + ": awsSecretKey init-param is missing.");
     }
-    awsSecretKey = awsSecretKeyString.getBytes(Charsets.UTF_8);
+    awsSecretKey = awsSecretKeyString.getBytes(StandardCharsets.UTF_8);
   }
 
   @Override
@@ -94,6 +94,19 @@ public class S3UploadServlet extends HttpServlet {
     );
   }
 
+  private static <K, V> Map<K, V> mapOf(K key, V value) {
+    Map<K, V> map = new HashMap<>();
+    map.put(key, value);
+    return map;
+  }
+
+  private static <K, V> Map<K, V> mapOf(K key1, V value1, K key2, V value2) {
+    Map<K, V> map = new HashMap<>();
+    map.put(key1, value1);
+    map.put(key2, value2);
+    return map;
+  }
+
   private void doBlobstore(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/xml; charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -105,18 +118,18 @@ public class S3UploadServlet extends HttpServlet {
     Calendar expiration = Calendar.getInstance();
     expiration.setTime(new Date());
     expiration.add(Calendar.HOUR, 24);
-    String policyDocument = new ObjectMapper().writeValueAsString(ImmutableMap.of(
+    String policyDocument = new ObjectMapper().writeValueAsString(mapOf(
       "expiration", iso8601.format(expiration.getTime()),
-      "conditions", ImmutableList.of(
-        ImmutableMap.of("bucket", awsBucketName),
-        ImmutableList.of("starts-with", "$key", ""),
-        ImmutableMap.of("acl", "public-read"),
-        ImmutableMap.of("redirect", redirect),
-        ImmutableList.of("content-length-range", 0, 10*1024*1024) // maximum 10MB
+      "conditions", Arrays.asList(
+        mapOf("bucket", awsBucketName),
+        Arrays.asList("starts-with", "$key", ""),
+        mapOf("acl", "public-read"),
+        mapOf("redirect", redirect),
+        Arrays.asList("content-length-range", 0, 10*1024*1024) // maximum 10MB
       )
     ));
 
-    String policy = new String(Base64.encodeBase64(policyDocument.getBytes(Charsets.UTF_8)));
+    String policy = new String(Base64.encodeBase64(policyDocument.getBytes(StandardCharsets.UTF_8)));
     Mac hmac = null;
     try {
       hmac = Mac.getInstance("HmacSHA1");
@@ -132,7 +145,7 @@ public class S3UploadServlet extends HttpServlet {
     }
 
     String fileKey = request.getParameter(UConsts.PARAM_NAME);
-    String signature = new String(Base64.encodeBase64(hmac.doFinal(policy.getBytes(Charsets.UTF_8))));
+    String signature = new String(Base64.encodeBase64(hmac.doFinal(policy.getBytes(StandardCharsets.UTF_8))));
     String blobPath = "http://s3.amazonaws.com/" + awsBucketName;
 
     out.println(
