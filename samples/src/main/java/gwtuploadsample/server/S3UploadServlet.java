@@ -19,13 +19,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
+import static org.apache.commons.text.StringEscapeUtils.escapeXml11;
 
 public class S3UploadServlet extends HttpServlet {
 
@@ -124,7 +125,7 @@ public class S3UploadServlet extends HttpServlet {
       logger.error("Cannot sign policy in " + getClass().getSimpleName() + ".doBlobstore: " + e.getMessage(), e);
       out.println(
         "<response>" +
-          "<" + UConsts.TAG_ERROR + ">" + StringEscapeUtils.escapeXml(e.getMessage()) + "</" + UConsts.TAG_ERROR + ">" +
+          "<" + UConsts.TAG_ERROR + ">" + escapeXml11(e.getMessage()) + "</" + UConsts.TAG_ERROR + ">" +
         "</response>"
       );
       return;
@@ -136,7 +137,7 @@ public class S3UploadServlet extends HttpServlet {
 
     out.println(
       "<response>" +
-        "<" + UConsts.TAG_BLOBSTORE_PATH + ">" + StringEscapeUtils.escapeXml(blobPath) + "</" + UConsts.TAG_BLOBSTORE_PATH + ">" +
+        "<" + UConsts.TAG_BLOBSTORE_PATH + ">" + escapeXml11(blobPath) + "</" + UConsts.TAG_BLOBSTORE_PATH + ">" +
         "<" + UConsts.TAG_BLOBSTORE_NAME + ">file</" + UConsts.TAG_BLOBSTORE_NAME + ">" +
         blobParam("key", fileKey) +
         blobParam("acl", "public-read") +
@@ -149,7 +150,7 @@ public class S3UploadServlet extends HttpServlet {
   }
 
   private static String blobParam(String name, String value) {
-    return "<" + UConsts.TAG_BLOBSTORE_PARAM + " " + UConsts.ATTR_BLOBSTORE_PARAM_NAME + "=\"" + StringEscapeUtils.escapeXml(name) + "\">" + StringEscapeUtils.escapeXml(value) + "</" + UConsts.TAG_BLOBSTORE_PARAM + ">";
+    return "<" + UConsts.TAG_BLOBSTORE_PARAM + " " + UConsts.ATTR_BLOBSTORE_PARAM_NAME + "=\"" + escapeXml11(name) + "\">" + escapeXml11(value) + "</" + UConsts.TAG_BLOBSTORE_PARAM + ">";
   }
 
   private void doDone(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -158,11 +159,11 @@ public class S3UploadServlet extends HttpServlet {
 
       String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
               "<response>" +
-              "<" + UConsts.TAG_FIELD + ">" + StringEscapeUtils.escapeXml(request.getParameter("key")) + "</" + UConsts.TAG_FIELD + ">" +
+              "<" + UConsts.TAG_FIELD + ">" + escapeXml11(request.getParameter("key")) + "</" + UConsts.TAG_FIELD + ">" +
               "<" + UConsts.TAG_FILE + ">" +
               "<" + UConsts.TAG_CTYPE + "> </" + UConsts.TAG_CTYPE + ">" + // content-type is unknown
               "<" + UConsts.TAG_SIZE + ">0</" + UConsts.TAG_SIZE + ">" + // size is unknown
-              "<" + UConsts.TAG_NAME + ">" + StringEscapeUtils.escapeXml(request.getParameter("key")) + "</" + UConsts.TAG_NAME + ">" +
+              "<" + UConsts.TAG_NAME + ">" + escapeXml11(request.getParameter("key")) + "</" + UConsts.TAG_NAME + ">" +
               "</" + UConsts.TAG_FILE + ">" +
               "<" + UConsts.TAG_FINISHED + ">" + UConsts.TAG_OK + "</" + UConsts.TAG_FINISHED + ">" +
               "<" + UConsts.TAG_MESSAGE + "><![CDATA[ok]]></" + UConsts.TAG_MESSAGE + ">" +
