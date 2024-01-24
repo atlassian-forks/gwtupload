@@ -1,18 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <parent>
-        <groupId>com.atlassian.pom</groupId>
-        <artifactId>public-pom</artifactId>
-        <version>6.3.1</version>
-    </parent>
-
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.gwtupload</groupId>
     <artifactId>gwtupload-project</artifactId>
     <name>GwtUpload project</name>
     <packaging>pom</packaging>
-    <version>1.0.3-atlassian-SNAPSHOT</version>
+    <version>1.0.3-atlassian-1</version>
 
     <modules>
         <module>core</module>
@@ -29,6 +23,7 @@
         <gwtVersion>2.9.0</gwtVersion>
         <gwtMaven>2.9.0</gwtMaven>
         <gae.version>1.9.17</gae.version>
+        <jetty.version>7.3.0.v20110203</jetty.version>
         <sonatypeRepoId>sonatype-nexus-snapshots</sonatypeRepoId>
         <sonatypeUrl>https://oss.sonatype.org/content/repositories/snapshots</sonatypeUrl>
         <wikiSvnExec>true</wikiSvnExec>
@@ -112,6 +107,13 @@
         <developerConnection>scm:git:git@github.com:atlassian-forks/gwtupload.git</developerConnection>
         <url>https://github.com/atlassian-forks/gwtupload</url>
     </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>maven-3rdparty</id>
+            <url>https://packages.atlassian.com/mvn/maven-3rdparty</url>
+        </repository>
+    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
@@ -213,13 +215,28 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.6.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-eclipse-plugin</artifactId>
                     <version>2.10</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>3.1.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.6.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.3.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -250,6 +267,11 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>gwt-maven-plugin</artifactId>
                     <version>${gwtMaven}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.mortbay.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>${jetty.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
