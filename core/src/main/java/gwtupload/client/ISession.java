@@ -19,117 +19,121 @@ import static gwtupload.shared.UConsts.TAG_SESSION_ID;
 
 public interface ISession {
 
-  class CORSSessionParameter extends Session {
-    @Override
-    protected void setSessionId(String s) {
-      super.setSessionId(s);
-      s = s == null? "" : (";jsessionid=" + s);
-      servletPath = servletPath.replaceFirst("^(.+)(/[^/\\?;]*)(;[^/\\?]*|)(\\?|/$|$)(.*)", "$1$2" + s + "$4$5");
-      System.err.println("CORS Session: " + servletPath);
-    }
-  }
-
-  class CORSSession extends Session {
-    @Override
-    protected RequestBuilder createRequest(Method method, int timeout, String... params) {
-      RequestBuilder req =  super.createRequest(method, timeout, params);
-      req.setIncludeCredentials(true);
-      return req;
-    }
-  }
-
-  class Session implements ISession {
-    String sessionId;
-    String servletPath = "servlet.gupld";
-
-    public static ISession createSession(String path, RequestCallback callback) {
-      Session ret;
-      if (path.startsWith("http")) {
-        ret = GWT.create(CORSSession.class);
-      } else {
-        ret = GWT.create(Session.class);
-      }
-      ret.servletPath = path;
-      ret.getSession(callback);
-      return ret;
-    }
-
-    /**
-     * Sends a request to the server in order to get the session cookie,
-     * when the response with the session comes, it submits the form.
-     * This is needed because this client application usually is part of
-     * static files, and the server doesn't set the session until dynamic pages
-     * are requested.
-     * If we submit the form without a session, the server creates a new
-     * one and send a cookie in the response, but the response with the
-     * cookie comes to the client at the end of the request, and in the
-     * meanwhile the client needs to know the session in order to ask
-     * the server for the upload status.
-     */
-    public void getSession(final RequestCallback callback) {
-      sendRequest("session", new RequestCallback() {
-        public void onResponseReceived(Request request, Response response) {
-          String s  = Cookies.getCookie("JSESSIONID");
-          if (s == null) {
-            s = Utils.getXmlNodeValue(XMLParser.parse(response.getText()), TAG_SESSION_ID);
-          }
-          setSessionId(s);
-          callback.onResponseReceived(request, response);
+    class CORSSessionParameter extends Session {
+        @Override
+        protected void setSessionId(String s) {
+            super.setSessionId(s);
+            s = s == null ? "" : (";jsessionid=" + s);
+            servletPath = servletPath.replaceFirst("^(.+)(/[^/\\?;]*)(;[^/\\?]*|)(\\?|/$|$)(.*)", "$1$2" + s + "$4$5");
+            System.err.println("CORS Session: " + servletPath);
         }
-        public void onError(Request request, Throwable exception) {
-          setSessionId(null);
-          callback.onError(request, exception);
+    }
+
+    class CORSSession extends Session {
+        @Override
+        protected RequestBuilder createRequest(Method method, int timeout, String... params) {
+            RequestBuilder req = super.createRequest(method, timeout, params);
+            req.setIncludeCredentials(true);
+            return req;
         }
-      }, PARAM_SESSION + "=true");
     }
 
-    protected void setSessionId(String s) {
-      sessionId = s;
+    class Session implements ISession {
+        String sessionId;
+        String servletPath = "servlet.gupld";
+
+        public static ISession createSession(String path, RequestCallback callback) {
+            Session ret;
+            if (path.startsWith("http")) {
+                ret = GWT.create(CORSSession.class);
+            } else {
+                ret = GWT.create(Session.class);
+            }
+            ret.servletPath = path;
+            ret.getSession(callback);
+            return ret;
+        }
+
+        /**
+         * Sends a request to the server in order to get the session cookie,
+         * when the response with the session comes, it submits the form.
+         * This is needed because this client application usually is part of
+         * static files, and the server doesn't set the session until dynamic pages
+         * are requested.
+         * If we submit the form without a session, the server creates a new
+         * one and send a cookie in the response, but the response with the
+         * cookie comes to the client at the end of the request, and in the
+         * meanwhile the client needs to know the session in order to ask
+         * the server for the upload status.
+         */
+        public void getSession(final RequestCallback callback) {
+            sendRequest("session", new RequestCallback() {
+                public void onResponseReceived(Request request, Response response) {
+                    String s = Cookies.getCookie("JSESSIONID");
+                    if (s == null) {
+                        s = Utils.getXmlNodeValue(XMLParser.parse(response.getText()), TAG_SESSION_ID);
+                    }
+                    setSessionId(s);
+                    callback.onResponseReceived(request, response);
+                }
+
+                public void onError(Request request, Throwable exception) {
+                    setSessionId(null);
+                    callback.onError(request, exception);
+                }
+            }, PARAM_SESSION + "=true");
+        }
+
+        protected void setSessionId(String s) {
+            sessionId = s;
+        }
+
+        public String getServletPath() {
+            return servletPath;
+        }
+
+        public void sendRequest(String payload, RequestCallback callback, String... params) {
+            // Using a reusable builder makes IE fail
+            final RequestBuilder reqBuilder = createRequest(RequestBuilder.GET, DEFAULT_AJAX_TIMEOUT, params);
+            try {
+                reqBuilder.sendRequest(payload, callback);
+            } catch (RequestException e) {
+                callback.onError(null, e);
+            }
+        }
+
+        protected RequestBuilder createRequest(Method method, int timeout, String... params) {
+            final RequestBuilder reqBuilder = new RequestBuilder(RequestBuilder.GET, composeURL(params));
+            reqBuilder.setTimeoutMillis(timeout);
+            return reqBuilder;
+        }
+
+        public String composeURL(String... parameters) {
+            final StringBuilder composedUrl = new StringBuilder(servletPath.replaceAll("[\\?&]+$", ""));
+            String separator = composedUrl.toString().contains("?") ? "&" : "?";
+            for (String parameter : parameters) {
+                composedUrl.append(separator)
+                        .append(parameter);
+                separator = "&";
+            }
+            for (Entry<String, List<String>> entry : Window.Location.getParameterMap().entrySet()) {
+                composedUrl.append(separator)
+                        .append(entry.getKey())
+                        .append("=")
+                        .append(entry.getValue().get(0));
+            }
+            composedUrl.append(separator).append("random=").append(Math.random());
+            return composedUrl.toString();
+        }
     }
 
-    public String getServletPath() {
-      return servletPath;
-    }
+    int DEFAULT_AJAX_TIMEOUT = 10000;
 
-    public void sendRequest(String payload, RequestCallback callback, String... params) {
-      // Using a reusable builder makes IE fail
-      RequestBuilder reqBuilder = createRequest(RequestBuilder.GET, DEFAULT_AJAX_TIMEOUT, params);
-      try {
-        reqBuilder.sendRequest(payload, callback);
-      } catch (RequestException e) {
-        callback.onError(null, e);
-      }
-    }
+    void getSession(RequestCallback callback);
 
-    protected RequestBuilder createRequest(Method method, int timeout, String...params) {
-      RequestBuilder reqBuilder = new RequestBuilder(RequestBuilder.GET, composeURL(params));
-      reqBuilder.setTimeoutMillis(timeout);
-      return reqBuilder;
-    }
+    String composeURL(String... params);
 
-    public String composeURL(String... params) {
-      StringBuilder ret = new StringBuilder(servletPath);
-      ret = new StringBuilder(ret.toString().replaceAll("[\\?&]+$", ""));
-      String sep = ret.toString().contains("?") ? "&" : "?";
-      for (String par : params) {
-        ret.append(sep).append(par);
-        sep = "&";
-      }
-      for (Entry<String, List<String>> e : Window.Location.getParameterMap().entrySet()) {
-        ret.append(sep).append(e.getKey()).append("=").append(e.getValue().get(0));
-      }
-      ret.append(sep).append("random=").append(Math.random());
-      return ret.toString();
-    }
-  }
+    void sendRequest(String name, RequestCallback callback, String... params);
 
-  int DEFAULT_AJAX_TIMEOUT = 10000;
-
-  void getSession(RequestCallback callback);
-
-  String composeURL(String... params);
-
-  void sendRequest(String name, RequestCallback callback, String... params);
-
-  String getServletPath();
+    String getServletPath();
 }

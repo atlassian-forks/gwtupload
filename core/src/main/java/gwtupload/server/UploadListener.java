@@ -84,7 +84,9 @@ public class UploadListener extends AbstractUploadListener {
       if (bytesRead > lastBytesRead) {
         lastData = now;
         lastBytesRead = bytesRead;
-      } else return now - lastData > noDataTimeout;
+      } else {
+        return now - lastData > noDataTimeout;
+      }
       return false;
     }
   }

@@ -41,204 +41,201 @@ import gwtupload.client.FileList;
  */
 public class DragAndDropFilesProvider implements HasValueChangeHandlers<FileList> {
 
-  private static Map<HasAllDragAndDropHandlers, List<HandlerRegistration>> handlerRegistrationsMap =
-          new HashMap<>();
+    private static final Map<HasAllDragAndDropHandlers, List<HandlerRegistration>> handlerRegistrationsMap = new HashMap<>();
 
-  private static void rememberHandlerRegistration(HasAllDragAndDropHandlers dropZoneWidget,
-      HandlerRegistration handler) {
-    List<HandlerRegistration> handlerRegistrationsList =
-        handlerRegistrationsMap.get(dropZoneWidget);
-    if (handlerRegistrationsList == null) {
-      handlerRegistrationsList = new ArrayList<>();
-      handlerRegistrationsMap.put(dropZoneWidget, handlerRegistrationsList);
-    }
-    handlerRegistrationsList.add(handler);
-  }
-
-  private static void removePreviousHandlers(HasAllDragAndDropHandlers dropZoneWidget) {
-    List<HandlerRegistration> handlerRegistrationsList =
-        handlerRegistrationsMap.get(dropZoneWidget);
-    if (handlerRegistrationsList != null) {
-      handlerRegistrationsMap.remove(dropZoneWidget);
-      for (HandlerRegistration handlerRegistration : handlerRegistrationsList) {
-        handlerRegistration.removeHandler();
-      }
-    }
-  }
-
-  //
-  private FileList files;
-  private String fieldName;
-  private boolean enabled = true;
-  private boolean sending = false;
-  private boolean pending = false;
-  private HandlerManager handlerManager;
-
-  private final class Handlers implements DropHandler, DragOverHandler, DragHandler,
-      DragEndHandler, DragEnterHandler, DragLeaveHandler, DragStartHandler, AttachEvent.Handler {
-
-    private void preventDefault(DragDropEventBase event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    public void onDrop(DropEvent event) {
-      preventDefault(event);
-      onDragDrop(event.getDataTransfer());
-    }
-
-    public void onDragOver(DragOverEvent event) {
-      preventDefault(event);
-    }
-
-    public void onDrag(DragEvent event) {
-      preventDefault(event);
-    }
-
-    public void onDragEnd(DragEndEvent event) {
-      preventDefault(event);
-    }
-
-    public void onDragEnter(DragEnterEvent event) {
-      preventDefault(event);
-    }
-
-    public void onDragLeave(DragLeaveEvent event) {
-      preventDefault(event);
-    }
-
-    public void onDragStart(DragStartEvent event) {
-      preventDefault(event);
-    }
-
-    public void onAttachOrDetach(AttachEvent event) {
-      if (!event.isAttached()) { // on detach
-        if (event.getSource() instanceof HasAllDragAndDropHandlers) {
-          // clean up from handlerRegistrationsMap to avoid
-          // potential memory leak:
-          removePreviousHandlers((HasAllDragAndDropHandlers) event.getSource());
+    private static void rememberHandlerRegistration(HasAllDragAndDropHandlers dropZoneWidget,
+                                                    HandlerRegistration handler) {
+        List<HandlerRegistration> handlerRegistrationsList = handlerRegistrationsMap.get(dropZoneWidget);
+        if (handlerRegistrationsList == null) {
+            handlerRegistrationsList = new ArrayList<>();
+            handlerRegistrationsMap.put(dropZoneWidget, handlerRegistrationsList);
         }
-      }
+        handlerRegistrationsList.add(handler);
     }
-  }
 
-  public DragAndDropFilesProvider(HasAllDragAndDropHandlers dropZoneWidget) {
-    initListeners(dropZoneWidget);
-  }
+    private static void removePreviousHandlers(HasAllDragAndDropHandlers dropZoneWidget) {
+        List<HandlerRegistration> handlerRegistrationsList = handlerRegistrationsMap.get(dropZoneWidget);
+        if (handlerRegistrationsList != null) {
+            handlerRegistrationsMap.remove(dropZoneWidget);
+            for (HandlerRegistration handlerRegistration : handlerRegistrationsList) {
+                handlerRegistration.removeHandler();
+            }
+        }
+    }
 
-  private void initListeners(HasAllDragAndDropHandlers dropZoneWidget) {
-    removePreviousHandlers(dropZoneWidget);
     //
-    final Handlers handlers = new Handlers();
-    rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDropHandler(handlers));
-    rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragOverHandler(handlers));
-    rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragHandler(handlers));
-    rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragEndHandler(handlers));
-    rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragEnterHandler(handlers));
-    rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragLeaveHandler(handlers));
-    rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragStartHandler(handlers));
-    // to clean up on drop zone detach:
-    if (dropZoneWidget instanceof HasAttachHandlers) {
-      ((HasAttachHandlers) dropZoneWidget).addAttachHandler(handlers);
+    private FileList files;
+    private String fieldName;
+    private boolean enabled = true;
+    private boolean sending = false;
+    private boolean pending = false;
+    private HandlerManager handlerManager;
+
+    private final class Handlers implements DropHandler, DragOverHandler, DragHandler,
+            DragEndHandler, DragEnterHandler, DragLeaveHandler, DragStartHandler, AttachEvent.Handler {
+
+        private void preventDefault(DragDropEventBase event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        public void onDrop(DropEvent event) {
+            preventDefault(event);
+            onDragDrop(event.getDataTransfer());
+        }
+
+        public void onDragOver(DragOverEvent event) {
+            preventDefault(event);
+        }
+
+        public void onDrag(DragEvent event) {
+            preventDefault(event);
+        }
+
+        public void onDragEnd(DragEndEvent event) {
+            preventDefault(event);
+        }
+
+        public void onDragEnter(DragEnterEvent event) {
+            preventDefault(event);
+        }
+
+        public void onDragLeave(DragLeaveEvent event) {
+            preventDefault(event);
+        }
+
+        public void onDragStart(DragStartEvent event) {
+            preventDefault(event);
+        }
+
+        public void onAttachOrDetach(AttachEvent event) {
+            if (!event.isAttached()) { // on detach
+                if (event.getSource() instanceof HasAllDragAndDropHandlers) {
+                    // clean up from handlerRegistrationsMap to avoid
+                    // potential memory leak:
+                    removePreviousHandlers((HasAllDragAndDropHandlers) event.getSource());
+                }
+            }
+        }
     }
-  }
 
-  private void onDragDrop(DataTransfer dataTransfer) {
-    if (!enabled || sending) {
-      return;
+    public DragAndDropFilesProvider(HasAllDragAndDropHandlers dropZoneWidget) {
+        initListeners(dropZoneWidget);
     }
-    files = getDataTransferFiles(dataTransfer);
-    pending = thereAreDragAndDropedFiles(files);
-    fireChangeEvent();
-  }
 
-  public FileList getDragAndDropedFiles() {
-    return files;
-  }
+    private void initListeners(HasAllDragAndDropHandlers dropZoneWidget) {
+        removePreviousHandlers(dropZoneWidget);
+        //
+        final Handlers handlers = new Handlers();
+        rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDropHandler(handlers));
+        rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragOverHandler(handlers));
+        rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragHandler(handlers));
+        rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragEndHandler(handlers));
+        rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragEnterHandler(handlers));
+        rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragLeaveHandler(handlers));
+        rememberHandlerRegistration(dropZoneWidget, dropZoneWidget.addDragStartHandler(handlers));
+        // to clean up on drop zone detach:
+        if (dropZoneWidget instanceof HasAttachHandlers) {
+            ((HasAttachHandlers) dropZoneWidget).addAttachHandler(handlers);
+        }
+    }
 
-  private native FileList getDataTransferFiles(DataTransfer dataTransfer) /*-{
+    private void onDragDrop(DataTransfer dataTransfer) {
+        if (!enabled || sending) {
+            return;
+        }
+        files = getDataTransferFiles(dataTransfer);
+        pending = thereAreDragAndDropedFiles(files);
+        fireChangeEvent();
+    }
+
+    public FileList getDragAndDropedFiles() {
+        return files;
+    }
+
+    private native FileList getDataTransferFiles(DataTransfer dataTransfer) /*-{
     return dataTransfer.files;
   }-*/;
 
-  public static boolean thereAreDragAndDropedFiles(FileList fileList) {
-    return fileList != null && fileList.getLength() > 0;
-  }
+    public static boolean thereAreDragAndDropedFiles(FileList fileList) {
+        return fileList != null && fileList.getLength() > 0;
+    }
 
-  public void lock() {
+    public void lock() {
 //    sending = true;
-  }
-
-  public void reset() {
-    sending = pending = false;
-    DragAndDropFormPanel.abortIfRunning();
-  }
-
-  public boolean thereAreDragAndDropedFiles() {
-    return pending;
-  }
-
-  public static String getFilename(FileList fileList) {
-    if (thereAreDragAndDropedFiles(fileList)) {
-      return fileList.item(0).getName();
-    } else {
-      return null;
     }
-  }
 
-  public String getFilename() {
-    return getFilename(files);
-  }
-
-  public static List<String> getFilenames(FileList fileList) {
-    ArrayList<String> result = new ArrayList<>();
-    if (fileList != null) {
-      for (int i = 0; i < fileList.getLength(); i++) {
-        result.add(fileList.item(i).getName());
-      }
+    public void reset() {
+        sending = pending = false;
+        DragAndDropFormPanel.abortIfRunning();
     }
-    return result;
-  }
 
-  public List<String> getFilenames() {
-    return getFilenames(files);
-  }
-
-  public String getName() {
-    return fieldName;
-  }
-
-  public boolean isEnabled() {
-    return enabled;
-  }
-
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  public void setName(String fieldName) {
-    this.fieldName = fieldName;
-  }
-
-  public void enableMultiple(boolean b) {
-  }
-
-  public void setAccept(String accept) {
-  }
-
-  public HandlerRegistration addValueChangeHandler(ValueChangeHandler<FileList> handler) {
-    if (handlerManager == null) {
-      handlerManager = new HandlerManager(this);
+    public boolean thereAreDragAndDropedFiles() {
+        return pending;
     }
-    return handlerManager.addHandler(ValueChangeEvent.getType(), handler);
-  }
 
-  private void fireChangeEvent() {
-    ValueChangeEvent.fire(this, files);
-  }
-
-  public void fireEvent(GwtEvent<?> event) {
-    if (handlerManager != null) {
-      handlerManager.fireEvent(event);
+    public static String getFilename(FileList fileList) {
+        if (thereAreDragAndDropedFiles(fileList)) {
+            return fileList.item(0).getName();
+        } else {
+            return null;
+        }
     }
-  }
+
+    public String getFilename() {
+        return getFilename(files);
+    }
+
+    public static List<String> getFilenames(FileList fileList) {
+        ArrayList<String> result = new ArrayList<>();
+        if (fileList != null) {
+            for (int i = 0; i < fileList.getLength(); i++) {
+                result.add(fileList.item(i).getName());
+            }
+        }
+        return result;
+    }
+
+    public List<String> getFilenames() {
+        return getFilenames(files);
+    }
+
+    public String getName() {
+        return fieldName;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setName(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
+    public void enableMultiple(boolean b) {
+    }
+
+    public void setAccept(String accept) {
+    }
+
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<FileList> handler) {
+        if (handlerManager == null) {
+            handlerManager = new HandlerManager(this);
+        }
+        return handlerManager.addHandler(ValueChangeEvent.getType(), handler);
+    }
+
+    private void fireChangeEvent() {
+        ValueChangeEvent.fire(this, files);
+    }
+
+    public void fireEvent(GwtEvent<?> event) {
+        if (handlerManager != null) {
+            handlerManager.fireEvent(event);
+        }
+    }
 }

@@ -46,319 +46,343 @@ import gwtupload.client.DecoratedFileUpload.FileUploadWithMouseEvents;
  */
 public interface IFileInput extends HasChangeHandlers, IsWidget {
 
-  /**
-   * A HyperLinkFileInput implementing the IFileInput interface
-   *
-   */
-  class AnchorFileInput extends ButtonFileInput {
-    public AnchorFileInput() {
-      super(new Anchor());
-    }
-  }
-
-  /**
-   * Just a FileUpload which implements the interface IFileInput
-   */
-  class BrowserFileInput extends FileUploadWithMouseEvents implements
-      IFileInput {
-
-    @Deprecated
-    public Widget getWidget() {
-      return asWidget();
-    }
-
-    public IFileInput newInstance() {
-      return new BrowserFileInput();
-    }
-
-    public void setLength(int length) {
-      DOM.setElementAttribute(getElement(), "size", "" + length);
+    /**
+     * A HyperLinkFileInput implementing the IFileInput interface
+     */
+    class AnchorFileInput extends ButtonFileInput {
+        public AnchorFileInput() {
+            super(new Anchor());
+        }
     }
 
     /**
-     * It is not possible to change the button text in a fileUplad type=file
+     * Just a FileUpload which implements the interface IFileInput
      */
-    public void setText(String text) {
-    }
+    class BrowserFileInput extends FileUploadWithMouseEvents implements IFileInput {
 
-    public void updateSize() {
-    }
-  }
-
-  /**
-   * A DecoratedFileInput implementing the IFileInput interface
-   *
-   */
-  class ButtonFileInput extends DecoratedFileUpload implements IFileInput {
-    protected boolean i18n = true;
-
-    public ButtonFileInput() {
-      this(new Button());
-    }
-
-    public ButtonFileInput(Widget w) {
-      this(w, true);
-    }
-
-    public ButtonFileInput(Widget w, boolean i18n) {
-      super(w);
-      this.i18n = i18n;
-      if (i18n) {
-        super.setText(Uploader.I18N_CONSTANTS.uploaderBrowse());
-      }
-    }
-
-    public IFileInput newInstance() {
-      Widget widget = button != null ? button : new Button(this.getText());
-      return new ButtonFileInput(widget, i18n);
-    }
-
-    public void setLength(int length) {
-    }
-
-    public void setText(String text) {
-      if (i18n) {
-        super.setText(text);
-      }
-    }
-  }
-
-  /**
-   * Enum for different IFileInput implementations
-   */
-  enum FileInputType implements HasFileInputType {
-    ANCHOR {
-      public IFileInput getInstance() {
-        return GWT.create(AnchorFileInput.class);
-      }
-      public FileInputType with(Widget w, boolean hasText) {
-        return this;
-      }
-      public FileInputType with(Widget w) {
-        return this;
-      }
-      public FileInputType withInput(IFileInput i) {
-        return this;
-      }
-      public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
-        return this;
-      }
-    },
-    BROWSER_INPUT {
-      public IFileInput getInstance() {
-        return GWT.create(BrowserFileInput.class);
-      }
-      public FileInputType with(Widget w, boolean hasText) {
-        return this;
-      }
-      public FileInputType with(Widget w) {
-        return this;
-      }
-      public FileInputType withInput(IFileInput i) {
-        return this;
-      }
-      public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
-        return this;
-      }
-    },
-    BUTTON {
-      public IFileInput getInstance() {
-        return GWT.create(ButtonFileInput.class);
-      }
-      public FileInputType with(Widget w, boolean hasText) {
-        return this;
-      }
-      public FileInputType with(Widget w) {
-        return this;
-      }
-      public FileInputType withInput(IFileInput i) {
-        return this;
-      }
-      public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
-        return this;
-      }
-    },
-    LABEL {
-      public IFileInput getInstance() {
-        return GWT.create(LabelFileInput.class);
-      }
-      public FileInputType with(Widget w, boolean hasText) {
-        return this;
-      }
-      public FileInputType with(Widget w) {
-        return this;
-      }
-      public FileInputType withInput(IFileInput i) {
-        return this;
-      }
-      public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
-        return this;
-      }
-    },
-    CUSTOM {
-      Widget widget;
-      boolean hasText = false;
-      IFileInput i = null;
-      private HasAllDragAndDropHandlers dropZone = null;
-      private boolean withDropZone = false;
-
-      public IFileInput getInstance() {
-        if (i == null) {
-          if (withDropZone) {
-            if (widget == null) {
-              i = GWT.create(DropZoneButtonFileInput.class);
-            } else {
-              i = new DropZoneButtonFileInput(widget, hasText, dropZone);
-            }
-          } else {
-            if (widget == null) {
-              i = GWT.create(ButtonFileInput.class);
-            } else {
-              i = new ButtonFileInput(widget, hasText);
-            }
-          }
+        @Deprecated
+        public Widget getWidget() {
+            return asWidget();
         }
-        return i.newInstance();
-      }
 
-      public FileInputType with(Widget widget, boolean hasText) {
-        i = null;
-        this.widget = widget;
-        this.hasText = hasText;
-        return this;
-      }
-      public FileInputType with(Widget w) {
-        return with(w, false);
-      }
-      public FileInputType withInput(IFileInput i) {
-        this.i = i;
-        return this;
-      }
-      public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
-        this.withDropZone = dropZone != null;
-        this.dropZone = dropZone;
-        return this;
-      }
-    },
-    DROPZONE {
-      private HasAllDragAndDropHandlers dropZone;
-
-      public IFileInput getInstance() {
-        return new DropZoneFileInput(dropZone);
-      }
-      public FileInputType with(Widget widget, boolean hasText) {
-        return this;
-      }
-      public FileInputType with(Widget w) {
-        return with(w, false);
-      }
-      public FileInputType withInput(IFileInput i) {
-        return this;
-      }
-      public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
-        this.dropZone = dropZone;
-        return this;
-      }
-    }
-  }
-
-  /**
-   * interface for FileInputType enum
-   */
-  interface HasFileInputType {
-    IFileInput getInstance();
-    FileInputType with(Widget w, boolean hasText);
-    FileInputType with(Widget w);
-    FileInputType withInput(IFileInput w);
-    FileInputType withZone(HasAllDragAndDropHandlers dropZone);
-  }
-
-  /**
-   * A LabelFileInput implementing the IFileInput interface
-   *
-   */
-  class LabelFileInput extends ButtonFileInput {
-    public LabelFileInput() {
-      super(new Label());
-      addChangeHandler(new ChangeHandler() {
-        public void onChange(ChangeEvent event) {
-          setText(getFilename());
+        public IFileInput newInstance() {
+            return new BrowserFileInput();
         }
-      });
+
+        public void setLength(int length) {
+            DOM.setElementAttribute(getElement(), "size", "" + length);
+        }
+
+        /**
+         * It is not possible to change the button text in a fileUplad type=file
+         */
+        public void setText(String text) {
+        }
+
+        public void updateSize() {
+        }
     }
-  }
 
-  /**
-   * Gets the filename selected by the user. This property has no mutator, as
-   * browser security restrictions preclude setting it.
-   *
-   * @return the widget's filename
-   */
-  String getFilename();
+    /**
+     * A DecoratedFileInput implementing the IFileInput interface
+     */
+    class ButtonFileInput extends DecoratedFileUpload implements IFileInput {
+        protected boolean i18n = true;
 
-  /**
-   * Gets the filenames selected by the user.
-   */
-  List<String> getFilenames();
+        public ButtonFileInput() {
+            this(new Button());
+        }
 
-  /**
-   * Gets the name of this fileUplad element.
-   *
-   * @return fieldName
-   */
-  String getName();
+        public ButtonFileInput(Widget w) {
+            this(w, true);
+        }
 
-  /**
-   * Returns the widget which will be inserted in the document.
-   * @deprecated use asWidget instead
-   */
-  @Deprecated
-  Widget getWidget();
+        public ButtonFileInput(Widget w, boolean i18n) {
+            super(w);
+            this.i18n = i18n;
+            if (i18n) {
+                super.setText(Uploader.I18N_CONSTANTS.uploaderBrowse());
+            }
+        }
 
-  /**
-   * return whether the fileUplad is or not enabled.
-   */
-  boolean isEnabled();
+        public IFileInput newInstance() {
+            Widget widget = button != null ? button : new Button(this.getText());
+            return new ButtonFileInput(widget, i18n);
+        }
 
-  /**
-   * Creates a new instance of the current object type.
-   *
-   * @return a new instance
-   */
-  IFileInput newInstance();
+        public void setLength(int length) {
+        }
 
-  /**
-   * Enable the file fileUplad.
-   */
-  void setEnabled(boolean b);
+        public void setText(String text) {
+            if (i18n) {
+                super.setText(text);
+            }
+        }
+    }
 
-  /**
-   * Set the length in characters of the fileinput which are shown.
-   */
-  void setLength(int length);
+    /**
+     * Enum for different IFileInput implementations
+     */
+    enum FileInputType implements HasFileInputType {
+        ANCHOR {
+            public IFileInput getInstance() {
+                return GWT.create(AnchorFileInput.class);
+            }
 
-  /**
-   * Sets the html name for this fileUplad element. It is the name of the form
-   * parameter sent to the server.
-   */
-  void setName(String fieldName);
+            public FileInputType with(Widget w, boolean hasText) {
+                return this;
+            }
 
-  /**
-   * Set the size of the widget.
-   */
-  void setSize(String width, String height);
+            public FileInputType with(Widget w) {
+                return this;
+            }
 
-  /**
-   * Set the text for the link which opens the browse file dialog.
-   */
-  void setText(String text);
+            public FileInputType withInput(IFileInput i) {
+                return this;
+            }
 
-  void setVisible(boolean b);
+            public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
+                return this;
+            }
+        },
+        BROWSER_INPUT {
+            public IFileInput getInstance() {
+                return GWT.create(BrowserFileInput.class);
+            }
 
-  void updateSize();
+            public FileInputType with(Widget w, boolean hasText) {
+                return this;
+            }
 
-  void enableMultiple(boolean b);
+            public FileInputType with(Widget w) {
+                return this;
+            }
 
-  void setAccept(String accept);
+            public FileInputType withInput(IFileInput i) {
+                return this;
+            }
+
+            public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
+                return this;
+            }
+        },
+        BUTTON {
+            public IFileInput getInstance() {
+                return GWT.create(ButtonFileInput.class);
+            }
+
+            public FileInputType with(Widget w, boolean hasText) {
+                return this;
+            }
+
+            public FileInputType with(Widget w) {
+                return this;
+            }
+
+            public FileInputType withInput(IFileInput i) {
+                return this;
+            }
+
+            public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
+                return this;
+            }
+        },
+        LABEL {
+            public IFileInput getInstance() {
+                return GWT.create(LabelFileInput.class);
+            }
+
+            public FileInputType with(Widget w, boolean hasText) {
+                return this;
+            }
+
+            public FileInputType with(Widget w) {
+                return this;
+            }
+
+            public FileInputType withInput(IFileInput i) {
+                return this;
+            }
+
+            public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
+                return this;
+            }
+        },
+        CUSTOM {
+            Widget widget;
+            boolean hasText = false;
+            IFileInput i = null;
+            private HasAllDragAndDropHandlers dropZone = null;
+            private boolean withDropZone = false;
+
+            public IFileInput getInstance() {
+                if (i == null) {
+                    if (withDropZone) {
+                        if (widget == null) {
+                            i = GWT.create(DropZoneButtonFileInput.class);
+                        } else {
+                            i = new DropZoneButtonFileInput(widget, hasText, dropZone);
+                        }
+                    } else {
+                        if (widget == null) {
+                            i = GWT.create(ButtonFileInput.class);
+                        } else {
+                            i = new ButtonFileInput(widget, hasText);
+                        }
+                    }
+                }
+                return i.newInstance();
+            }
+
+            public FileInputType with(Widget widget, boolean hasText) {
+                i = null;
+                this.widget = widget;
+                this.hasText = hasText;
+                return this;
+            }
+
+            public FileInputType with(Widget w) {
+                return with(w, false);
+            }
+
+            public FileInputType withInput(IFileInput i) {
+                this.i = i;
+                return this;
+            }
+
+            public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
+                this.withDropZone = dropZone != null;
+                this.dropZone = dropZone;
+                return this;
+            }
+        },
+        DROPZONE {
+            private HasAllDragAndDropHandlers dropZone;
+
+            public IFileInput getInstance() {
+                return new DropZoneFileInput(dropZone);
+            }
+
+            public FileInputType with(Widget widget, boolean hasText) {
+                return this;
+            }
+
+            public FileInputType with(Widget w) {
+                return with(w, false);
+            }
+
+            public FileInputType withInput(IFileInput i) {
+                return this;
+            }
+
+            public FileInputType withZone(HasAllDragAndDropHandlers dropZone) {
+                this.dropZone = dropZone;
+                return this;
+            }
+        }
+    }
+
+    /**
+     * interface for FileInputType enum
+     */
+    interface HasFileInputType {
+        IFileInput getInstance();
+
+        FileInputType with(Widget w, boolean hasText);
+
+        FileInputType with(Widget w);
+
+        FileInputType withInput(IFileInput w);
+
+        FileInputType withZone(HasAllDragAndDropHandlers dropZone);
+    }
+
+    /**
+     * A LabelFileInput implementing the IFileInput interface
+     */
+    class LabelFileInput extends ButtonFileInput {
+        public LabelFileInput() {
+            super(new Label());
+            addChangeHandler(new ChangeHandler() {
+                public void onChange(ChangeEvent event) {
+                    setText(getFilename());
+                }
+            });
+        }
+    }
+
+    /**
+     * Gets the filename selected by the user. This property has no mutator, as
+     * browser security restrictions preclude setting it.
+     *
+     * @return the widget's filename
+     */
+    String getFilename();
+
+    /**
+     * Gets the filenames selected by the user.
+     */
+    List<String> getFilenames();
+
+    /**
+     * Gets the name of this fileUplad element.
+     *
+     * @return fieldName
+     */
+    String getName();
+
+    /**
+     * Returns the widget which will be inserted in the document.
+     *
+     * @deprecated use asWidget instead
+     */
+    @Deprecated
+    Widget getWidget();
+
+    /**
+     * return whether the fileUplad is or not enabled.
+     */
+    boolean isEnabled();
+
+    /**
+     * Creates a new instance of the current object type.
+     *
+     * @return a new instance
+     */
+    IFileInput newInstance();
+
+    /**
+     * Enable the file fileUplad.
+     */
+    void setEnabled(boolean b);
+
+    /**
+     * Set the length in characters of the fileinput which are shown.
+     */
+    void setLength(int length);
+
+    /**
+     * Sets the html name for this fileUplad element. It is the name of the form
+     * parameter sent to the server.
+     */
+    void setName(String fieldName);
+
+    /**
+     * Set the size of the widget.
+     */
+    void setSize(String width, String height);
+
+    /**
+     * Set the text for the link which opens the browse file dialog.
+     */
+    void setText(String text);
+
+    void setVisible(boolean b);
+
+    void updateSize();
+
+    void enableMultiple(boolean b);
+
+    void setAccept(String accept);
 
 }
