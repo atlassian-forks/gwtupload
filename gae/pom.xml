@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.googlecode.gwtupload</groupId>
         <artifactId>gwtupload-project</artifactId>
-        <version>1.0.3-atlassian-2</version>
+        <version>1.0.3-atlassian-3-SNAPSHOT</version>
     </parent>
 
     <dependencies>

@@ -5,7 +5,7 @@
     <artifactId>gwtupload-project</artifactId>
     <name>GwtUpload project</name>
     <packaging>pom</packaging>
-    <version>1.0.3-atlassian-2</version>
+    <version>1.0.3-atlassian-3-SNAPSHOT</version>
 
     <modules>
         <module>core</module>
@@ -105,7 +105,7 @@
         <connection>scm:git:git@github.com:atlassian-forks/gwtupload.git</connection>
         <developerConnection>scm:git:git@github.com:atlassian-forks/gwtupload.git</developerConnection>
         <url>https://github.com/atlassian-forks/gwtupload</url>
-      <tag>1.0.3-atlassian-2</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <distributionManagement>
