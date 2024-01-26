@@ -20,6 +20,7 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
+import gwtupload.server.XMLResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 
@@ -123,32 +124,33 @@ public class BlobstoreUploadAction extends UploadAction {
                 blobstoreService.serve(new BlobKey(request.getParameter(PARAM_BLOBKEY)), response);
             } catch (Throwable e) {
                 logger.info("BLOB-STORE-SERVLET: Exception accessing blobStoreService:" + e.getMessage(), e);
-                renderXmlResponse(request, response, "Error getting blob: " + e.getMessage() + " " + request.getParameter(PARAM_BLOBKEY));
+                final XMLResponse xmlResponse = new XMLResponse();
+                xmlResponse.addResponseTag(TAG_ERROR, "Error getting blob: " + e.getMessage() + " " + request.getParameter(PARAM_BLOBKEY));
+                renderXmlResponse(request, response, xmlResponse);
             }
         } else if (request.getParameter(PARAM_REDIRECT) != null) {
             perThreadRequest.set(request);
-            final Map<String, String> statusProperties = new HashMap<>();
+            final XMLResponse xmlResponse = new XMLResponse();
             if (request.getParameter(PARAM_ERROR) != null) {
-                statusProperties.put(TAG_ERROR, request.getParameter(PARAM_ERROR));
+                xmlResponse.addResponseTag(TAG_ERROR, request.getParameter(PARAM_ERROR));
             } else if (request.getParameter(PARAM_CANCEL) != null) {
-                statusProperties.put(TAG_CANCELED, request.getParameter(PARAM_CANCEL));
+                xmlResponse.addResponseTag(TAG_CANCELED, request.getParameter(PARAM_CANCEL));
             } else {
                 try {
-                    getFileItemsSummary(request, statusProperties);
+                    getFileItemsSummary(request, xmlResponse);
                     String message = executeAction(request, getMySessionFileItems(request));
-                    statusProperties.put(TAG_MESSAGE, message);
-                    statusProperties.put(TAG_FINISHED, RESP_OK);
+                    xmlResponse.addResponseTag(TAG_MESSAGE, message);
+                    xmlResponse.addResponseTag(TAG_FINISHED, RESP_OK);
                 } catch (UploadActionException e) {
                     logger.error("ExecuteUploadActionException: " + e);
-                    statusProperties.put(TAG_ERROR, e.getMessage());
+                    xmlResponse.addResponseTag(TAG_ERROR, e.getMessage());
                 }
             }
 
-            final String statusAsString = statusToString(statusProperties);
-            finish(request, statusAsString);
+            finish(request, xmlResponse);
 
-            logger.debug("BLOB-STORE-SERVLET: (" + request.getSession().getId() + ") redirect \n" + statusAsString);
-            renderXmlResponse(request, response, statusAsString, true);
+            logger.debug("BLOB-STORE-SERVLET: (" + request.getSession().getId() + ") redirect \n" + xmlResponse);
+            renderXmlResponse(request, response, xmlResponse, true);
 
             perThreadRequest.set(null);
         } else {
@@ -158,7 +160,7 @@ public class BlobstoreUploadAction extends UploadAction {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String error = null;
+        String error;
         perThreadRequest.set(request);
         try {
             error = super.parsePostRequest(request, response);

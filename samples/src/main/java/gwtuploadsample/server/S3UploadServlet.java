@@ -33,6 +33,11 @@ public class S3UploadServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private static final Logger logger = Logger.getLogger(S3UploadServlet.class);
 
+  private static final String TAG_MSG_START = "%%%INI%%%";
+  private static final String TAG_MSG_END = "%%%END%%%";
+  private static final String TAG_MSG_GT = "^^^@@";
+  private static final String TAG_MSG_LT = "@@^^^";
+
   private String awsBucketName;
   private String awsAccessKey;
   private byte[] awsSecretKey;
@@ -181,7 +186,7 @@ public class S3UploadServlet extends HttpServlet {
               "<" + UConsts.TAG_FINISHED + ">" + UConsts.TAG_OK + "</" + UConsts.TAG_FINISHED + ">" +
               "<" + UConsts.TAG_MESSAGE + "><![CDATA[ok]]></" + UConsts.TAG_MESSAGE + ">" +
               "</response>";
-    out.print(UConsts.TAG_MSG_START + xml.replaceAll("<", UConsts.TAG_MSG_LT).replaceAll(">", UConsts.TAG_MSG_GT) + UConsts.TAG_MSG_END);
+    out.print(TAG_MSG_START + xml.replaceAll("<", TAG_MSG_LT).replaceAll(">", TAG_MSG_GT) + TAG_MSG_END);
   }
 
   private void doShow(HttpServletRequest request, HttpServletResponse response) {

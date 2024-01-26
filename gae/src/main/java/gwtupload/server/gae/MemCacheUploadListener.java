@@ -25,6 +25,7 @@ import javax.cache.Cache;
 import javax.cache.CacheManager;
 
 import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
+import gwtupload.server.XMLResponse;
 
 /**
  * This is a File Upload Listener that can be used by Apache Commons File Upload to
@@ -112,9 +113,9 @@ public class MemCacheUploadListener extends AbstractUploadListener {
   }
 
   @Override
-  public void setFinished(String postResponse) {
+  public void setFinished(XMLResponse xmlResponse) {
     counter = 0;
-    super.setFinished(postResponse);
+    super.setFinished(xmlResponse);
   }
 
   public String toString() {
