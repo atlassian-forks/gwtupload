@@ -27,8 +27,8 @@ import org.timepedia.exporter.client.Exportable;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.Panel;
@@ -48,7 +48,6 @@ import com.google.gwt.user.client.ui.Widget;
  * <li>The user can cancel the current upload, can delete files in the queue or remove uploaded files</li>
  * </ul>
  */
-
 @Export
 @ExportPackage("jsu")
 public class Upload implements Exportable {
@@ -145,25 +144,25 @@ public class Upload implements Exportable {
     /**
      * adds a javascript DOM element to the upload form.
      */
-    public void addElement(Element e) {
-        addElement(e, -1);
+    public void addElement(Element element) {
+        addElement(element, -1);
     }
 
     /**
      * adds a javascript DOM element to the upload form at the specified position
      */
-    public void addElement(Element e, int index) {
-        Widget w = null;
-        if (e.getTagName().equalsIgnoreCase("input") && e.getAttribute("type").equalsIgnoreCase("hidden")) {
-            if (!Document.get().getBody().isOrHasChild(e)) {
-                Document.get().getBody().appendChild(e);
+    public void addElement(Element element, int index) {
+        final Widget widget;
+        if (element.getTagName().equalsIgnoreCase("input") && element.getAttribute("type").equalsIgnoreCase("hidden")) {
+            if (!Document.get().getBody().isOrHasChild(element)) {
+                Document.get().getBody().appendChild(element);
             }
-            w = Hidden.wrap(e);
+            widget = Hidden.wrap(element);
         } else {
-            w = new HTML();
-            DOM.appendChild(w.getElement(), e);
+            widget = new HTML();
+            DOM.appendChild(widget.getElement(), element);
         }
-        uploader.add(w, index);
+        uploader.add(widget, index);
     }
 
     /**
